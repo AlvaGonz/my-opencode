@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Skill Verifier Rubric Schema",
+  "description": "OpenAI-compatible rubric schema for LLM-as-judge style checks. Every skill eval must produce output matching this schema.",
+  "type": "object",
+  "properties": {
+    "overall_pass": {
+      "type": "boolean",
+      "description": "Whether the skill output passes overall quality standards."
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "description": "Aggregate quality score for the skill output."
+    },
+    "checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique check identifier (e.g., 'clarity', 'completeness', 'correctness', 'conventions')."
+          },
+          "pass": {
+            "type": "boolean",
+            "description": "Whether this specific check passed."
+          },
+          "notes": {
+            "type": "string",
+            "description": "Human-readable explanation of the check result, including specifics on what passed or failed."
+          }
+        },
+        "required": ["id", "pass", "notes"],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "description": "Array of per-check results. Must include at least one check."
+    }
+  },
+  "required": ["overall_pass", "score", "checks"],
+  "additionalProperties": false
+}

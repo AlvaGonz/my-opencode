@@ -1,0 +1,100 @@
+{
+  "mcpServers": {
+    "mssql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mssql-mcp@latest"
+      ],
+      "env": {
+        "MSSQL_HOST": "localhost",
+        "MSSQL_PORT": "1433",
+        "MSSQL_USER": "sa",
+        "MSSQL_PASSWORD": "<your-password>",
+        "MSSQL_DATABASE": "AppDb"
+      },
+      "disabled": false
+    },
+    "github-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-github-token>"
+      },
+      "autoApprove": [],
+      "disabledTools": [
+        "assign_copilot_to_issue",
+        "get_teams",
+        "add_comment_to_pending_review"
+      ],
+      "disabled": false
+    },
+    "mongodb-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mongodb-mcp-server"
+      ],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "<your-mongodb-connection-string>"
+      },
+      "disabled": true
+    },
+    "awesome-copilot": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "Logging__LogLevel__Default=Error",
+        "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": []
+    },
+    "context7-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "resolve-library-id",
+        "query-docs"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": "<your-context7-api-key>"
+      }
+    },
+    "StitchMCP": {
+      "$typeName": "exa.cascade_plugins_pb.CascadePluginCommandTemplate",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://stitch.googleapis.com/mcp",
+        "--header",
+        "X-Goog-Api-Key: <your-gcp-api-key>"
+      ],
+      "env": {},
+      "disabled": false
+    }
+  }
+}

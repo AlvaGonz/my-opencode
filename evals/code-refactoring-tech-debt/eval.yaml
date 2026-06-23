@@ -1,0 +1,43 @@
+name: code-refactoring-tech-debt-eval
+description: Evaluation suite for code-refactoring-tech-debt.
+skill: code-refactoring-tech-debt
+version: "1.0"
+
+config:
+  trials_per_task: 1
+  max_attempts: 2
+  timeout_seconds: 300
+  parallel: false
+  executor: mock
+  model: claude-sonnet-4.6
+
+# Outcome checks (deterministic — did the task complete?)
+graders:
+  - type: text
+    name: outcome_check
+    config:
+      regex_match: ["(?i)(completed|finished|success|created|implemented|configured|set up|generated|built)"]
+
+  # Process checks (did the skill follow expected steps?)
+  - type: action_sequence
+    name: process_check
+    config:
+      matching_mode: all_anywhere
+      expected_actions: ["bash", "read", "write", "edit"]
+
+  # Style checks (does output match conventions? LLM-as-judge)
+  - type: prompt
+    name: style_check
+    config:
+      prompt: |
+        Evaluate if the output matches the expected quality standards for 'code-refactoring-tech-debt': You are a technical debt expert specializing in identifying, quantifying, and prioritizing technical debt in software projects. Analyze the codebase to uncover debt, assess its impact, and create acti. Assess clarity, correctness, completeness, and adherence to conventions.
+
+  # Efficiency checks (no thrashing, no token bloat)
+  - type: behavior
+    name: efficiency_check
+    config:
+      max_tool_calls: 30
+      max_duration_ms: 300000
+
+tasks:
+  - "tasks/*.yaml"

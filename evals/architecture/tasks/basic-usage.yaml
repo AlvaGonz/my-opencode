@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Analyze the trade-offs between microservices and modular monolith for this e-commerce platform."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

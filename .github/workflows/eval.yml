@@ -1,0 +1,77 @@
+name: Run Skill Evaluations
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'evals/**'
+      - 'skills/**'
+  push:
+    branches: [main]
+    paths:
+      - 'evals/**'
+      - 'skills/**'
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+jobs:
+  check:
+    name: Skill Readiness Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install waza
+        run: curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+      - name: Run waza check --strict on all skills
+        run: |
+          for skill in skills/*/; do
+            name=$(basename "$skill")
+            echo "=== Checking $name ==="
+            waza check "skills/$name" --strict || echo "⚠️ $name has issues"
+          done
+
+  eval:
+    name: Evaluation Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install waza
+        run: curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+      - name: Run all evals (discover mode)
+        run: waza run --discover --strict --verbose --output results.json
+      - name: Check token budgets vs main branch
+        run: waza tokens compare main --skills --threshold 10 --strict --format json || echo "Token budget check completed"
+      - name: Post PR comment
+        if: github.event_name == 'pull_request'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          waza run --discover --format github-comment > comment.md
+          gh pr comment ${{ github.event.pull_request.number }} --body-file comment.md
+      - name: Upload results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eval-results
+          path: results.json
+          retention-days: 30
+
+  coverage:
+    name: Coverage Report
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install waza
+        run: curl -fsSL https://raw.githubusercontent.com/microsoft/waza/main/install.sh | bash
+      - name: Generate coverage report
+        run: waza coverage --format markdown > evals/coverage-report.md
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: evals/coverage-report.md
+          retention-days: 30

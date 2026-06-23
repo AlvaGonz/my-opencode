@@ -1,0 +1,6 @@
+{
+  "engine": "postgresql",
+  "slow_query_threshold_ms": 100,
+  "explain_format": "ANALYZE|BUFFERS",
+  "index_strategy": "b-tree"
+}

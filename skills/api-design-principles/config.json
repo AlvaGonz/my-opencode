@@ -1,0 +1,7 @@
+{
+  "style": "REST",
+  "versioning": "path",
+  "pagination": "cursor",
+  "error_format": "RFC7807",
+  "spec_version": "OpenAPI 3.1"
+}

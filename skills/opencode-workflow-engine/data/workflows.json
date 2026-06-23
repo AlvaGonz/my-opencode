@@ -1,0 +1,314 @@
+﻿{
+  "version": "3.0.0",
+  "generated_at": "2026-06-23T02:00:00Z",
+  "workflows": [
+    {
+      "id": "opencode-feature-delivery",
+      "name": "Feature Delivery Pipeline",
+      "description": "Guided implementation of a new feature with spec, approval, and post-implementation hooks",
+      "trigger": "When implementing a new feature end-to-end",
+      "file": "agents/workflows/opencode-feature-delivery.md",
+      "phases": [
+        "Step 0: Session Init (@opencode-session-init)",
+        "Phase A: Brain Query",
+        "Phase B: Spec Generation",
+        "Phase C: Agent Prompt Execution",
+        "Phase D: Post-Implementation Review"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "development",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-ci-autofix",
+      "name": "CI Auto-Heal Loop",
+      "description": "Autofix CI failures using GitHub MCP logs + error-pattern-mining + tdd-workflow + critic gate.",
+      "trigger": "CI/CD failure detected on GitHub",
+      "file": "agents/workflows/opencode-ci-autofix.md",
+      "phases": [
+        "Initialize Session Files",
+        "Read CI failure logs via GitHub MCP",
+        "Root cause analysis",
+        "Extract error pattern",
+        "Write a failing test",
+        "Apply minimal fix",
+        "Run full validation suite",
+        "Submit to critic gate",
+        "Push fix"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-error-mining", "opencode-tdd"],
+      "category": "ci",
+      "requires_mcps": ["mcp-github-mcp-server", "mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-debug-session",
+      "name": "Debug Session Workflow",
+      "description": "Guided debugging of an unexpected error or behavior following ARQ protocol",
+      "trigger": "Unexpected error or behavior encountered",
+      "file": "agents/workflows/opencode-debug-session.md",
+      "phases": [
+        "Step 0: Initialize Session Files",
+        "Step 1: Execute brain query",
+        "Step 2: Analyze stack trace",
+        "Step 3: Generate surgical agent prompt",
+        "Step 4: Update brain"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "debugging",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-boundary-check",
+      "name": "Architecture Boundary Verification",
+      "description": "Verify frontend/backend/DB layer separation is not violated.",
+      "trigger": "Before major refactoring or boundary checks",
+      "file": "agents/workflows/opencode-boundary-check.md",
+      "phases": [
+        "Initialize Session Files",
+        "Frontend -> Backend boundary",
+        "Backend -> Frontend boundary",
+        "Database access boundary",
+        "Business logic in frontend check",
+        "API call isolation",
+        "Output boundary report"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "quality",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-codebase-audit",
+      "name": "Comprehensive Codebase Audit",
+      "description": "Perform a comprehensive audit of the codebase structure, dead code, and architecture boundaries.",
+      "trigger": "Periodic audit of structure, dead code, domains",
+      "file": "agents/workflows/opencode-codebase-audit.md",
+      "phases": [
+        "Initialize Session Files",
+        "Map repository layout",
+        "Read package.json and server/package.json",
+        "Detect unused frontend dependencies",
+        "Detect unused backend dependencies",
+        "Check architecture boundary violations",
+        "Identify monolithic files",
+        "Check LDR domain coverage",
+        "Output AUDIT.md"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "quality",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-dead-code-sweep",
+      "name": "Dead Code Elimination",
+      "description": "Remove unused files, unreachable code, and stale artifacts from the repo.",
+      "trigger": "Remove unused files, exports, stale artifacts",
+      "file": "agents/workflows/opencode-dead-code-sweep.md",
+      "phases": [
+        "Initialize Session Files",
+        "Identify stale root-level files",
+        "Find unreachable exports",
+        "Remove confirmed dead files",
+        "Remove stale artifacts",
+        "Prune empty directories",
+        "Run lint + typecheck after cleanup",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "maintenance",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-frontend-restructure",
+      "name": "Feature-Based Directory Restructure",
+      "description": "Enforce src/features/<domain>/ structure across the frontend codebase.",
+      "trigger": "Enforce src/features/<domain>/ structure",
+      "file": "agents/workflows/opencode-frontend-restructure.md",
+      "phases": [
+        "Initialize Session Files",
+        "Identify all current component files",
+        "Map each component to its target domain",
+        "Move domain components",
+        "Update all import paths",
+        "Move domain-specific hooks",
+        "Confirm src/components/ contains only reusable UI",
+        "Run full test suite",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "refactoring",
+      "requires_mcps": ["mcp-context7-mcp", "mcp-StitchMCP"]
+    },
+    {
+      "id": "opencode-backend-restructure",
+      "name": "Domain-Module Directory Restructure",
+      "description": "Move and enforce server/src/modules/<domain>/ structure across the backend.",
+      "trigger": "Enforce server/src/modules/<domain>/ structure",
+      "file": "agents/workflows/opencode-backend-restructure.md",
+      "phases": [
+        "Initialize Session Files",
+        "Audit current backend structure",
+        "Map each file to its target domain module",
+        "Move files domain by domain",
+        "Update all import paths",
+        "Verify server/src/shared/",
+        "Register updated routes",
+        "Run backend tests",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "refactoring",
+      "requires_mcps": ["mcp-context7-mcp", "mcp-mssql"]
+    },
+    {
+      "id": "opencode-memory-sync",
+      "name": "Cross-Session Memory Load",
+      "description": "Load cross-session memory and surface top risks from previous sessions.",
+      "trigger": "Session start or gap > 24 hours",
+      "file": "agents/workflows/opencode-memory-sync.md",
+      "phases": [
+        "Initialize Session Files",
+        "Read .agents/sessions/<id>/session-memory.md",
+        "Surface top 3 risks",
+        "Surface top 3 patterns to avoid",
+        "Load unresolved lessons",
+        "Log",
+        "Global Sync Step"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "maintenance",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-post-task-hook",
+      "name": "Post-Task Hook Evaluation",
+      "description": "Runs automatically after every completed agent task to evaluate quality via ECC + EvoAgentX.",
+      "trigger": "Automatically after every completed task",
+      "file": "agents/workflows/opencode-post-task-hook.md",
+      "phases": [
+        "Initialize Session Files",
+        "Collect task details",
+        "Run ECC Research Agent on diff",
+        "Run EvoAgentX Fitness Evaluator",
+        "Run Mutation Engine if score < 80",
+        "Write new skills if novel patterns found",
+        "Run post task loop script",
+        "Read stdout JSON",
+        "Address HIGH issues",
+        "Proceed to commit",
+        "Perform Git commit with stats"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-ecc-research", "opencode-evo-fitness"],
+      "category": "ci",
+      "requires_mcps": ["mcp-context7-mcp", "mcp-github-mcp-server"]
+    },
+    {
+      "id": "opencode-coverage-backlog",
+      "name": "Coverage Backlog Generation",
+      "description": "Generate test specs for low-coverage domains based on coverage gaps.",
+      "trigger": "Coverage drops or backlog needed",
+      "file": "agents/workflows/opencode-coverage-backlog.md",
+      "phases": [
+        "Initialize Session Files",
+        "Read .agents/sessions/<id>/TEST-REPORT.md",
+        "Filter domains with < 20% coverage",
+        "Activate coverage-evolution skill",
+        "Write test specs to .agents/sessions/<id>/test-backlog.md",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-coverage-evolution"],
+      "category": "quality",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-error-digest",
+      "name": "Error Digest Generation",
+      "description": "Summarize error patterns to surface top recurring root causes.",
+      "trigger": "Recurring error pattern analysis",
+      "file": "agents/workflows/opencode-error-digest.md",
+      "phases": [
+        "Initialize Session Files",
+        "Read .agents/sessions/<id>/error-patterns.md",
+        "Send to LLM for summary",
+        "Output digest to .agents/sessions/<id>/error-digest.md",
+        "Surface in next planning brief"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "quality",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-evolve-prompts",
+      "name": "LOW-FITNESS Evolution Workflow",
+      "description": "Automate the optimization of underperforming agent skills.",
+      "trigger": "Underperforming agent skill optimization",
+      "file": "agents/workflows/opencode-evolve-prompts.md",
+      "phases": [
+        "Initialize Session Files",
+        "Audit Fitness",
+        "Context Gathering",
+        "EvoPrompt Execution",
+        "Validation",
+        "Deployment",
+        "Logging",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init"],
+      "category": "maintenance",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-evolve-skills",
+      "name": "LOW-FITNESS Skill Evolution Workflow",
+      "description": "Automate the evolution of low-fitness agent skills using scoring.",
+      "trigger": "Skills with fitness < 60%",
+      "file": "agents/workflows/opencode-evolve-skills.md",
+      "phases": [
+        "Initialize Session Files",
+        "Read .agents/sessions/<id>/skill-fitness-log.md",
+        "List skills with fitness < 60%",
+        "Activate skill-fitness",
+        "Apply improvements",
+        "Commit"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-skill-fitness"],
+      "category": "maintenance",
+      "requires_mcps": ["mcp-context7-mcp"]
+    },
+    {
+      "id": "opencode-security-audit",
+      "name": "Security Audit and CI/CD Pipeline Integration",
+      "description": "Perform a comprehensive Security Audit and implement a robust CI/CD pipeline with automated vulnerability scanning.",
+      "trigger": "Full security review + automated pipeline",
+      "file": "agents/workflows/opencode-security-audit.md",
+      "phases": [
+        "Initialize Session Files",
+        "Security Audit & Code Review",
+        "Supply Chain & Dependency Audit",
+        "CI/CD Pipeline Implementation",
+        "Verification & Performance Reporting"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-security-firewall"],
+      "category": "security",
+      "requires_mcps": ["mcp-context7-mcp", "mcp-github-mcp-server"]
+    },
+    {
+      "id": "opencode-agent-evolution",
+      "name": "AI Agent Evolution Pipeline",
+      "description": "Build or evolve an AI agent using ECC research patterns and EvoAgentX evolutionary fitness optimization.",
+      "trigger": "Build or evolve AI agent with ECC + EvoAgentX",
+      "file": "agents/workflows/opencode-agent-evolution.md",
+      "phases": [
+        "Step 0: Initialize Session Files (@opencode-session-init)",
+        "Phase 1: ECC Research — Deep-scan existing codebase for patterns",
+        "Phase 2: EvoAgentX Fitness Evaluation — Score current agent output",
+        "Phase 3: Mutation Engine — Propose evolved workflow steps if score < 80",
+        "Phase 4: Novel Skill Writing — Write new SKILL.md if pattern is novel",
+        "Phase 5: Registry Rebuild — skills-lock.json update",
+        "Phase 6: Evolution Log — Record mutation cycle in evolution_log.md"
+      ],
+      "requires_skills": ["opencode-session-init", "opencode-ecc-research", "opencode-evo-fitness"],
+      "category": "agent",
+      "requires_mcps": ["mcp-context7-mcp"]
+    }
+  ]
+}

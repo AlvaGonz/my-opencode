@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Create a new release branch and open a PR for the v2.3.0 release."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

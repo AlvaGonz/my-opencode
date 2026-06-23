@@ -1,0 +1,6 @@
+{
+  "framework": "MITRE ATT&CK",
+  "scope": "external",
+  "phase": "recon|initial-access|persistence|lateral-movement|exfiltration",
+  "report_format": "markdown"
+}

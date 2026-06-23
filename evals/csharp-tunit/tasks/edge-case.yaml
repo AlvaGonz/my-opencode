@@ -1,0 +1,13 @@
+id: edge-case-001
+name: Edge Case - Secondary Trigger
+description: |
+  Test the skill with a variation of the primary trigger pattern.
+tags:
+  - edge-case
+  - positive-trigger
+inputs:
+  prompt: "csharp tunit: review this implementation for quality issues"
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Create a GitHub Actions CI workflow for testing and building this Node.js project."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

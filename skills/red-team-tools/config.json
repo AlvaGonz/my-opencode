@@ -1,0 +1,6 @@
+{
+  "os": "linux",
+  "target": "cloud",
+  "c2_framework": "sliver",
+  "language_preference": "rust|python|bash"
+}

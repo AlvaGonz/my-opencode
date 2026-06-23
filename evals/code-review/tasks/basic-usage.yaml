@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Review this pull request for code quality issues and security concerns."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

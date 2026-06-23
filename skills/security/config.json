@@ -1,0 +1,7 @@
+{
+  "cloud": "aws",
+  "profile": "default",
+  "region": "us-east-1",
+  "compliance_framework": "CIS|SOC2|PCI-DSS",
+  "prowler_output": "json"
+}

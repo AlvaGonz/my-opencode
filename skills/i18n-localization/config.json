@@ -1,0 +1,61 @@
+{
+  "framework": "next",
+  "strategy": "i18next",
+  "default_locale": "en",
+  "supported_locales": ["en", "es", "fr", "ar"],
+  "rtl_locales": ["ar"],
+  "namespaces": ["common", "errors", "forms"],
+  "i18next": {
+    "compatibilityJSON": "v4",
+    "keySeparator": ".",
+    "nsSeparator": ":",
+    "pluralSeparator": "_",
+    "contextSeparator": "_",
+    "interpolation": {
+      "prefix": "{{",
+      "suffix": "}}"
+    },
+    "backend": {
+      "loadPath": "assets/{{lng}}.json"
+    },
+    "detection": {
+      "order": ["cookie", "navigator", "htmlTag", "path", "subdomain"],
+      "caches": ["cookie"]
+    }
+  },
+  "lingui": {
+    "locales": ["en", "es", "fr", "ar"],
+    "sourceLocale": "en",
+    "pseudoLocale": "",
+    "catalogs": [
+      {
+        "path": "assets/{locale}/messages",
+        "include": ["src"],
+        "exclude": ["**/node_modules/**"]
+      }
+    ],
+    "format": "po",
+    "compileNamespace": "cjs",
+    "fallbackLocales": {
+      "default": "en"
+    }
+  },
+  "formatjs": {
+    "locales": ["en", "es", "fr", "ar"],
+    "defaultLocale": "en",
+    "polyfills": {
+      "intl-pluralrules": true,
+      "intl-relativetimeformat": true,
+      "intl-datetimeformat": true,
+      "intl-displaynames": true,
+      "intl-listformat": true,
+      "intl-numberformat": true
+    }
+  },
+  "routing": {
+    "strategy": "sub-path",
+    "defaultLocaleRedirect": true,
+    "localeCookie": "NEXT_LOCALE",
+    "cookieMaxAge": 31536000
+  }
+}

@@ -1,0 +1,422 @@
+openapi: 3.1.0
+info:
+  title: Resource API
+  description: |
+    Production-grade Resource API scaffold following Microsoft REST API Guidelines
+    and PayPal API Standards. Uses path-based versioning, Bearer JWT auth, cursor
+    pagination, and RFC 7807 error envelopes.
+  version: "2026-06-01"
+  contact:
+    name: API Team
+    url: https://example.com/support
+  license:
+    name: MIT
+servers:
+  - url: https://api.example.com/v1
+    description: Production server
+  - url: https://sandbox.example.com/v1
+    description: Sandbox for testing
+security:
+  - BearerAuth: []
+paths:
+  /resources:
+    get:
+      operationId: listResources
+      summary: List all resources
+      description: |
+        Returns a paginated list of resources. Supports cursor-based pagination,
+        filtering, and sorting. Results are ordered by creation date descending
+        by default.
+      parameters:
+        - $ref: '#/components/parameters/cursor'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/filter'
+        - $ref: '#/components/parameters/sort'
+      responses:
+        "200":
+          description: A paginated list of resources
+          headers:
+            x-request-id:
+              schema:
+                type: string
+              description: Unique request identifier for tracing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceCollection'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+    post:
+      operationId: createResource
+      summary: Create a new resource
+      description: |
+        Creates a new resource. The caller supplies the resource representation.
+        Idempotent when used with Idempotency-Key header — duplicate requests
+        return the existing resource with 200 OK.
+      parameters:
+        - $ref: '#/components/parameters/idempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateResourceRequest'
+      responses:
+        "201":
+          description: Resource created successfully
+          headers:
+            Location:
+              schema:
+                type: string
+                format: uri
+              description: Canonical URL of the created resource
+            x-request-id:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        "200":
+          description: Resource already exists (idempotent retry)
+          headers:
+            x-request-id:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        "400":
+          $ref: '#/components/responses/BadRequest'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "422":
+          $ref: '#/components/responses/UnprocessableEntity'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+  /resources/{resourceId}:
+    get:
+      operationId: getResource
+      summary: Retrieve a resource by ID
+      description: Returns the full representation of a single resource.
+      parameters:
+        - $ref: '#/components/parameters/resourceId'
+      responses:
+        "200":
+          description: Resource found
+          headers:
+            ETag:
+              schema:
+                type: string
+              description: Entity tag for optimistic concurrency
+            x-request-id:
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resource'
+        "401":
+          $ref: '#/components/responses/Unauthorized'
+        "404":
+          $ref: '#/components/responses/NotFound'
+        "500":
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        JSON Web Token obtained from the authentication service.
+        Format: Bearer <token>
+  parameters:
+    resourceId:
+      name: resourceId
+      in: path
+      required: true
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9\-_]{8,64}$'
+      description: Unique identifier of the resource (opaque string, URL-safe)
+      example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    cursor:
+      name: cursor
+      in: query
+      required: false
+      schema:
+        type: string
+        nullable: true
+      description: |
+        Opaque cursor from the previous page response. Omit for the first page.
+        The cursor encodes the server-side position and is not intended to be
+        parsed by clients.
+      example: "eyJpZCI6IjEyMyIsInNjb3JlIjoiMjAyNi0wMS0yOFQwMDowMDowMFoifQ=="
+    pageSize:
+      name: page_size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 1000
+        default: 50
+      description: Maximum number of items to return per page.
+      example: 50
+    filter:
+      name: filter
+      in: query
+      required: false
+      schema:
+        type: string
+      description: |
+        Filter expression following a simple query language.
+        Example: "status eq 'active' and created_at gt '2026-01-01'"
+      example: "status eq 'active'"
+    sort:
+      name: sort
+      in: query
+      required: false
+      schema:
+        type: string
+        default: "-created_at"
+      description: |
+        Comma-separated sort fields. Prefix with '-' for descending.
+        Example: "created_at,-priority"
+      example: "-created_at"
+    idempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: false
+      schema:
+        type: string
+        format: uuid
+      description: |
+        Unique UUID that identifies the request. If a request with the same
+        Idempotency-Key is received within 24 hours, the server returns the
+        result of the original request. See PayPal Idempotency pattern.
+      example: "7c6b7d8e-9f0a-1b2c-3d4e-5f6a7b8c9d0e"
+  schemas:
+    Resource:
+      type: object
+      description: Full resource representation.
+      properties:
+        id:
+          type: string
+          description: Server-assigned opaque identifier.
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        name:
+          type: string
+          description: Human-readable resource name.
+          minLength: 1
+          maxLength: 255
+          example: "My Resource"
+        status:
+          type: string
+          enum:
+            - active
+            - inactive
+            - archived
+          description: Current lifecycle status.
+          example: "active"
+        created_at:
+          type: string
+          format: date-time
+          description: RFC 3339 timestamp of creation.
+          example: "2026-06-01T12:00:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          description: RFC 3339 timestamp of last update.
+          example: "2026-06-15T08:30:00Z"
+        metadata:
+          type: object
+          description: Free-form key-value metadata (max 16 entries).
+          additionalProperties:
+            type: string
+            maxLength: 512
+          maxProperties: 16
+          example:
+            environment: "production"
+            owner: "team-alpha"
+      required:
+        - id
+        - name
+        - status
+        - created_at
+    CreateResourceRequest:
+      type: object
+      description: Payload for creating a new resource.
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+          description: Human-readable resource name.
+          example: "My New Resource"
+        metadata:
+          type: object
+          additionalProperties:
+            type: string
+            maxLength: 512
+          maxProperties: 16
+          description: Optional metadata.
+          example:
+            environment: "sandbox"
+      required:
+        - name
+    ResourceCollection:
+      type: object
+      description: Paginated collection of resources.
+      properties:
+        data:
+          type: array
+          description: Array of resource objects for the current page.
+          items:
+            $ref: '#/components/schemas/Resource'
+        pagination:
+          type: object
+          description: Cursor-based pagination metadata.
+          properties:
+            cursor:
+              type: string
+              nullable: true
+              description: |
+                Opaque cursor for the next page. Null when on the last page.
+              example: "eyJuZXh0IjoiMTIzIn0="
+            has_more:
+              type: boolean
+              description: Whether additional pages are available.
+              example: true
+          required:
+            - cursor
+            - has_more
+      required:
+        - data
+        - pagination
+    ErrorResponse:
+      type: object
+      description: |
+        RFC 7807 Problem Details envelope. All error responses use this shape.
+      properties:
+        type:
+          type: string
+          format: uri
+          description: URI identifying the problem type.
+          example: "https://api.example.com/errors/validation-error"
+        title:
+          type: string
+          description: Short, human-readable summary of the problem type.
+          example: "Validation Error"
+        status:
+          type: integer
+          description: HTTP status code for this occurrence.
+          example: 422
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence.
+          example: "The 'name' field must be between 1 and 255 characters."
+        instance:
+          type: string
+          format: uri
+          description: URI identifying the specific occurrence of the problem.
+          example: "/resources/abc-123/errors/err-xyz"
+        errors:
+          type: array
+          description: Detailed validation or sub-errors.
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+                description: The field that caused the error.
+                example: "name"
+              reason:
+                type: string
+                description: Machine-readable error code for the field.
+                example: "TOO_SHORT"
+              message:
+                type: string
+                description: Human-readable explanation for the field error.
+                example: "Must be at least 1 character"
+            required:
+              - field
+              - reason
+      required:
+        - type
+        - title
+        - status
+  responses:
+    BadRequest:
+      description: Request could not be understood due to malformed syntax.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: "https://api.example.com/errors/bad-request"
+            title: "Bad Request"
+            status: 400
+            detail: "The request body contains invalid JSON at line 3."
+            instance: "/resources/err-400-abc"
+    Unauthorized:
+      description: Authentication is required or the provided credentials are invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: "https://api.example.com/errors/unauthorized"
+            title: "Unauthorized"
+            status: 401
+            detail: "Bearer token is missing, expired, or invalid."
+            instance: "/resources/err-401-def"
+    NotFound:
+      description: The specified resource does not exist.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: "https://api.example.com/errors/not-found"
+            title: "Not Found"
+            status: 404
+            detail: "Resource with ID 'invalid-id' was not found."
+            instance: "/invalid-id"
+    UnprocessableEntity:
+      description: Request body is semantically invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: "https://api.example.com/errors/validation-error"
+            title: "Unprocessable Entity"
+            status: 422
+            detail: "One or more fields failed validation."
+            instance: "/resources/err-422-ghi"
+            errors:
+              - field: "name"
+                reason: "REQUIRED"
+                message: "The name field is required."
+              - field: "metadata"
+                reason: "MAX_PROPERTIES_EXCEEDED"
+                message: "Metadata must have at most 16 entries."
+    InternalServerError:
+      description: Unexpected server error.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+          example:
+            type: "https://api.example.com/errors/internal-error"
+            title: "Internal Server Error"
+            status: 500
+            detail: "An unexpected error occurred. Contact support with request ID."
+            instance: "/resources/err-500-jkl"

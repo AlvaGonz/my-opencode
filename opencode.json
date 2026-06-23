@@ -1,0 +1,26 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": {
+        "baseURL": "https://integrate.api.nvidia.com/v1",
+        "apiKey": "{env:NVIDIA_API_KEY}",
+        "timeout": 600000,
+        "chunkTimeout": 45000
+      },
+      "models": {
+        "nemotron-ultra": {
+          "name": "NVIDIA Nemotron 3 Ultra 550B",
+          "id": "nvidia/nemotron-3-ultra-550b-a55b"
+        },
+        "minimax-m3": {
+          "name": "MiniMax M3 via NVIDIA",
+          "id": "minimaxai/minimax-m3"
+        }
+      }
+    }
+  },
+  "model": "nvidia/nemotron-ultra"
+}

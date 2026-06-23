@@ -1,0 +1,126 @@
+{
+  "description": "Complete map of anime.js v4 named easing functions to their CSS representations.",
+  "version": "4.5.0",
+  "sources": [
+    "https://github.com/juliangarnier/anime",
+    "https://animejs.com/easing-editor"
+  ],
+
+  "linear": {
+    "linear": "linear"
+  },
+
+  "power": {
+    "inQuad":    "cubicBezier(0.55, 0.085, 0.68, 0.53)",
+    "outQuad":   "cubicBezier(0.25, 0.46, 0.45, 0.94)",
+    "inOutQuad": "cubicBezier(0.455, 0.03, 0.515, 0.955)",
+    "outInQuad": "cubicBezier(0.455, 0.03, 0.515, 0.955)",
+
+    "inCubic":    "cubicBezier(0.55, 0.055, 0.675, 0.19)",
+    "outCubic":   "cubicBezier(0.215, 0.61, 0.355, 1)",
+    "inOutCubic": "cubicBezier(0.645, 0.045, 0.355, 1)",
+    "outInCubic": "cubicBezier(0.645, 0.045, 0.355, 1)",
+
+    "inQuart":    "cubicBezier(0.895, 0.03, 0.685, 0.22)",
+    "outQuart":   "cubicBezier(0.165, 0.84, 0.44, 1)",
+    "inOutQuart": "cubicBezier(0.77, 0, 0.175, 1)",
+    "outInQuart": "cubicBezier(0.77, 0, 0.175, 1)",
+
+    "inQuint":    "cubicBezier(0.755, 0.05, 0.855, 0.06)",
+    "outQuint":   "cubicBezier(0.23, 1, 0.32, 1)",
+    "inOutQuint": "cubicBezier(0.86, 0, 0.07, 1)",
+    "outInQuint": "cubicBezier(0.86, 0, 0.07, 1)"
+  },
+
+  "sine": {
+    "inSine":    "cubicBezier(0.47, 0, 0.745, 0.715)",
+    "outSine":   "cubicBezier(0.39, 0.575, 0.565, 1)",
+    "inOutSine": "cubicBezier(0.445, 0.05, 0.55, 0.95)",
+    "outInSine": "cubicBezier(0.445, 0.05, 0.55, 0.95)"
+  },
+
+  "expo": {
+    "inExpo":    "cubicBezier(0.95, 0.05, 0.795, 0.035)",
+    "outExpo":   "cubicBezier(0.19, 1, 0.22, 1)",
+    "inOutExpo": "cubicBezier(1, 0, 0, 1)",
+    "outInExpo": "cubicBezier(1, 0, 0, 1)"
+  },
+
+  "circ": {
+    "inCirc":    "cubicBezier(0.6, 0.04, 0.98, 0.335)",
+    "outCirc":   "cubicBezier(0.075, 0.82, 0.165, 1)",
+    "inOutCirc": "cubicBezier(0.785, 0.135, 0.15, 0.86)",
+    "outInCirc": "cubicBezier(0.785, 0.135, 0.15, 0.86)"
+  },
+
+  "back": {
+    "inBack":    "cubicBezier(0.6, -0.28, 0.735, 0.045)",
+    "outBack":   "cubicBezier(0.175, 0.885, 0.32, 1.275)",
+    "inOutBack": "cubicBezier(0.68, -0.55, 0.265, 1.55)",
+    "outInBack": "cubicBezier(0.68, -0.55, 0.265, 1.55)"
+  },
+
+  "elastic": {
+    "inElastic":    "cubicBezier(0.75, 0.25, 0.95, 0.7)",
+    "outElastic":   "cubicBezier(0.25, 0.15, 0.4, 1.4)",
+    "inOutElastic": "cubicBezier(0.7, 0.1, 0.3, 1.2)",
+    "outInElastic": "cubicBezier(0.7, 0.1, 0.3, 1.2)"
+  },
+
+  "bounce": {
+    "inBounce":    "cubicBezier(0.5, 0.05, 0.6, 0.4)",
+    "outBounce":   "cubicBezier(0.15, 0.8, 0.35, 1.15)",
+    "inOutBounce": "cubicBezier(0.4, 0.0, 0.6, 1.0)",
+    "outInBounce": "cubicBezier(0.4, 0.0, 0.6, 1.0)"
+  },
+
+  "steps": {
+    "steps(2)":   "steps(2)",
+    "steps(3)":   "steps(3)",
+    "steps(4)":   "steps(4)",
+    "steps(5)":   "steps(5)",
+    "steps(10)":  "steps(10)",
+    "steps(20)":  "steps(20)",
+    "steps-start": "steps(1, start)",
+    "steps-end":   "steps(1, end)"
+  },
+
+  "spring": {
+    "description": "Spring easings are passed as objects, not strings. Example: ease: spring({ bounce: 0.25, duration: 800 })",
+    "presets": {
+      "default": { "bounce": 0.2, "duration": 800 },
+      "snappy":  { "stiffness": 200, "damping": 25, "duration": 500 },
+      "bouncy":  { "bounce": 0.4, "duration": 900 },
+      "strong":  { "stiffness": 300, "damping": 10, "duration": 1000 }
+    },
+    "parameters": {
+      "stiffness": "Spring stiffness (default: 100)",
+      "damping": "Spring damping (default: 20)",
+      "bounce": "Bounciness 0-1 (default: 0.25)",
+      "duration": "Settling duration in ms",
+      "mass": "Spring mass (default: 1)",
+      "velocity": "Initial velocity (default: 0)"
+    }
+  },
+
+  "irregular": {
+    "irregular-light": "linear(0, 0.1, 0.2 30%, 0.8 70%, 0.9, 1)",
+    "irregular-heavy": "linear(0, 0.3 10%, 0.1 30%, 0.9 70%, 0.7 90%, 1)"
+  },
+
+  "cubicBezier": {
+    "description": "Custom cubic-bezier easings. Pass as string: ease: 'cubicBezier(0.25, 0.1, 0.25, 1)'",
+    "classic-eases": {
+      "ease":       "cubicBezier(0.25, 0.1, 0.25, 1)",
+      "ease-in":    "cubicBezier(0.42, 0, 1, 1)",
+      "ease-out":   "cubicBezier(0, 0, 0.58, 1)",
+      "ease-in-out": "cubicBezier(0.42, 0, 0.58, 1)"
+    }
+  },
+
+  "conversion_notes": {
+    "waapi_easing": "WAAPI uses CSS easing strings. Custom easings (spring, elastic, bounce) are converted to CSS linear() via waapi.convertEase().",
+    "js_engine_easing": "The JS engine animate() accepts all easing types natively including spring objects.",
+    "import": "import { spring, cubicBezier } from 'animejs';"
+  }
+}

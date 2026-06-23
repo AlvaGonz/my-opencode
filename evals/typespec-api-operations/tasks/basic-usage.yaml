@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Add GET and POST operations to this TypeSpec API service definition."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true

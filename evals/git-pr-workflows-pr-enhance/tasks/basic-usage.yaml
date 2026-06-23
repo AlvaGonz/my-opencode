@@ -1,0 +1,14 @@
+id: basic-usage-001
+name: Basic Usage - Positive Trigger
+description: |
+  Test that the skill activates and completes its primary use case.
+tags:
+  - basic
+  - happy-path
+  - positive-trigger
+inputs:
+  prompt: "Enhance this PR description with a clear summary and testing notes."
+expected:
+  outcomes:
+    - type: task_completed
+should_trigger: true
