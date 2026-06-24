@@ -1,7 +1,7 @@
 # ACTIVE SYSTEM STATE
 # This file is dynamically parsed by session hooks. DO NOT modify the keys.
 
-Active Profile: essential
+Active Profile: developer
 Active Project: [none]
 
 ## CONNECTED MCP SERVERS
@@ -26,4 +26,8 @@ Active Project: [none]
 
 ## Last Session: 20260624-0018
 Last Stop: 2026-06-24T04:18:12.917Z
+Findings: 4
+
+## Last Session: 20260624-0035
+Last Stop: 2026-06-24T04:35:42.207Z
 Findings: 4

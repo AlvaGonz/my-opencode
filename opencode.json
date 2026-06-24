@@ -23,15 +23,7 @@
     "agents/subagents/DocWriter.md"
   ],
   "skills": [
-    "skills/ecc/coding-standards/SKILL.md",
-    "skills/ecc/security-review/SKILL.md",
-    "skills/ecc/tdd-workflow/SKILL.md",
-    "skills/ecc/verification-loop/SKILL.md",
-    "skills/ecc/backend-patterns/SKILL.md",
-    "skills/ecc/api-design/SKILL.md",
-    "skills/ecc/error-handling/SKILL.md",
-    "skills/ecc/deployment-patterns/SKILL.md",
-    "skills/ecc/architecture-decision-records/SKILL.md"
+    "skills/task-management"
   ],
   "commands": [
     "command/tdd.md",
@@ -44,5 +36,7 @@
   ],
   "context_root": ".opencode/context",
   "approval_gates": true,
-  "parallel_execution": true
+  "parallel_execution": true,
+  "active_profile": "developer",
+  "profile_activated_at": "2026-06-24T04:35:41.433Z"
 }
