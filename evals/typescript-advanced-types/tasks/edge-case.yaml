@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "typescript advanced types: review this implementation for quality issues"
+  prompt: "Comprehensive guidance for mastering TypeScript's advanced type system including generics, conditional types, mapped typ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

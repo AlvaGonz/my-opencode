@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "owasp security: review this implementation for quality issues"
+  prompt: "Use when reviewing code for security vulnerabilities, implementing authentication/authorization, handling user input, or..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

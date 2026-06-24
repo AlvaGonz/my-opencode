@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "typespec create api plugin: review this implementation for quality issues"
+  prompt: "Generate a TypeSpec API plugin with REST operations, authentication, and Adaptive Cards for Microsoft 365 Copilot"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "planning with files: review this implementation for quality issues"
+  prompt: "Implements Manus-style file-based planning to organize and track progress on complex tasks. Creates task_plan.md, findin..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

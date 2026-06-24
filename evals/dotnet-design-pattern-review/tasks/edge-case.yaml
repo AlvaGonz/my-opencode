@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "dotnet design pattern review: review this implementation for quality issues"
+  prompt: "Review the C#/.NET code for design pattern implementation and suggest improvements."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

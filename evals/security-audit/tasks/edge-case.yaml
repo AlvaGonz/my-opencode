@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "security audit: review this implementation for quality issues"
+  prompt: "Comprehensive security auditing workflow covering web application testing, API security, penetration testing, vulnerabil..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

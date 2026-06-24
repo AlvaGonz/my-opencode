@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "security guardrails: review this implementation for quality issues"
+  prompt: "Apply systemic security validations and adversarial review models."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

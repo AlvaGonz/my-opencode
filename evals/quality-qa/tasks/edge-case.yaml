@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "quality qa: review this implementation for quality issues"
+  prompt: "Enforce rigorous quality assurance via matrix testing and smoke checklists."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

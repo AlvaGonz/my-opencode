@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "task management: review this implementation for quality issues"
+  prompt: "Task management CLI for tracking and managing feature subtasks with status, dependencies, and validation"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

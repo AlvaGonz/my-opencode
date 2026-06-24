@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "wcag audit patterns: review this implementation for quality issues"
+  prompt: "Comprehensive guide to auditing web content against WCAG 2.2 guidelines with actionable remediation strategies."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

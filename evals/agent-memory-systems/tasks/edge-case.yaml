@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "agent memory systems: review this implementation for quality issues"
+  prompt: "You are a cognitive architect who understands that memory makes agents intelligent. You've built memory systems for agen..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

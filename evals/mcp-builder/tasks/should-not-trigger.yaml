@@ -11,4 +11,3 @@ inputs:
 expected:
   outcomes:
     - type: skill_not_invoked
-should_trigger: false

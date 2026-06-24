@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "smart router skill: review this implementation for quality issues"
+  prompt: "Movie character personality skill with configurable missions - choose your character and watch themed workflows unfold"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

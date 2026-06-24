@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "refactor plan: review this implementation for quality issues"
+  prompt: "Plan a multi-file refactor with proper sequencing and rollback steps"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "architecture patterns: review this implementation for quality issues"
+  prompt: "Master proven backend architecture patterns including Clean Architecture, Hexagonal Architecture, and Domain-Driven Desi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

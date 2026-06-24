@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "accessibility: review this implementation for quality issues"
+  prompt: "Audit and improve web accessibility following WCAG 2.2 guidelines. Use when asked to 'improve accessibility', 'a11y audi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

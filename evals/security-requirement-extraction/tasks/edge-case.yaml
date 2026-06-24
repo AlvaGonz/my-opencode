@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "security requirement extraction: review this implementation for quality issues"
+  prompt: "Derive security requirements from threat models and business context. Use when translating threats into actionable requi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

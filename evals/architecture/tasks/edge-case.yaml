@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "architecture: review this implementation for quality issues"
+  prompt: "Architectural decision-making framework. Requirements analysis, trade-off evaluation, ADR documentation. Use when making..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

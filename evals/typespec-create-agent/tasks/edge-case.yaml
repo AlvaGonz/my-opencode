@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "typespec create agent: review this implementation for quality issues"
+  prompt: "Generate a complete TypeSpec declarative agent with instructions, capabilities, and conversation starters for Microsoft ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

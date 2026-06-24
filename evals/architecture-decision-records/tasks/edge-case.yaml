@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "architecture decision records: review this implementation for quality issues"
+  prompt: "Comprehensive patterns for creating, maintaining, and managing Architecture Decision Records (ADRs) that capture the con..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "i18n localization: review this implementation for quality issues"
+  prompt: "Add internationalization and localization support including string translation, locale-based routing, RTL language suppo..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "red team tools: review this implementation for quality issues"
+  prompt: "Tool selection guidance for red team operations including recon, C2 frameworks, lateral movement, privilege escalation, ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

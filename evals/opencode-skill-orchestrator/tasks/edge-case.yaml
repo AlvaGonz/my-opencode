@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "opencode skill orchestrator: review this implementation for quality issues"
+  prompt: "A meta-skill that dynamically discovers available skills from local and global directories, evaluates task complexity, s..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

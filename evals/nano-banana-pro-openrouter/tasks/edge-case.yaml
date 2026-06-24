@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "nano banana pro openrouter: review this implementation for quality issues"
+  prompt: "Generate or edit images via OpenRouter with the Gemini 3 Pro Image model. Use for prompt-only image generation, image ed..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

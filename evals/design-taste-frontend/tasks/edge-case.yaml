@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "design taste frontend: review this implementation for quality issues"
+  prompt: "Anti-slop frontend skill for landing pages, portfolios, and redesigns. The agent reads the brief, infers the right desig..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

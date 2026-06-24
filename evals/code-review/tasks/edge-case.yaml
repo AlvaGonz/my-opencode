@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "code review: review this implementation for quality issues"
+  prompt: "Perform code reviews following Sentry engineering practices. Use when reviewing pull requests, examining code changes, o..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

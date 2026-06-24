@@ -1,0 +1,27 @@
+version: 1.0
+name: ECC-Adapted-OpenCode
+description: OpenCode configuration adapted from ECC framework
+main_agent: agents/core/openagent.md
+subagents:
+  - planners.md
+  - security-reviewer.md
+  - code-reviewer.md
+  - tdd-guide.md
+  - architect.md
+  - refactor-cleaner.md
+  - build-error-resolver.md
+skills:
+  - skills/ecc/coding-standards/SKILL.md
+  - skills/ecc/security-review/SKILL.md
+  - skills/ecc/tdd-workflow/SKILL.md
+commands:
+  - command/tdd.md
+  - command/security.md
+  - command/code-review.md
+  - command/verify.md
+  - command/refactor-clean.md
+  - command/build-fix.md
+  - command/orchestrate.md
+context_root: .opencode/context
+approval_gates: true
+parallel_execution: true

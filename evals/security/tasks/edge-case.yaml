@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "security: review this implementation for quality issues"
+  prompt: "AWS cloud security including IAM policies, compliance scanning, secrets rotation, cloud security posture, and security a..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

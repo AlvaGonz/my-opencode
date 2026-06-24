@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "context7: review this implementation for quality issues"
+  prompt: "Retrieve up-to-date documentation for software libraries, frameworks, and components via the Context7 API. This skill sh..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

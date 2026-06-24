@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "playwright: review this implementation for quality issues"
+  prompt: "Unified Playwright browser automation skill. Use when the user needs to navigate websites, interact with pages, fill for..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

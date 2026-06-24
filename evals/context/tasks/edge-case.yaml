@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "context: review this implementation for quality issues"
+  prompt: "Context management skill providing discovery, fetching, harvesting, extraction, compression, organization, cleanup, and ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

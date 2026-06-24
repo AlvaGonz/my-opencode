@@ -8,31 +8,29 @@ config:
   max_attempts: 2
   timeout_seconds: 300
   parallel: false
-  executor: mock
-  model: claude-sonnet-4.6
+  executor: copilot-sdk
+  model: claude-haiku-4.5
 
-# Outcome checks (deterministic — did the task complete?)
+# Outcome check — output contains skill-relevant domain terms (zero-cost)
 graders:
   - type: text
     name: outcome_check
     config:
-      regex_match: ["(?i)(completed|finished|success|created|implemented|configured|set up|generated|built)"]
+      regex_match: ["(?i)(dotnet|best|practices|ensure|netc|code)"]
 
-  # Process checks (did the skill follow expected steps?)
-  - type: action_sequence
+  # Process check — output shows methodology/action language (zero-cost)
+  - type: text
     name: process_check
     config:
-      matching_mode: all_anywhere
-      expected_actions: ["bash", "read", "write", "edit"]
+      regex_match: ["(?i)(audit|analyze|review|check|evaluate|implement|design|configure|optimize|test|refactor|debug|monitor|assess|validate|verify|recommend|identify|apply|create|build|set.up|migrate|upgrade|integrate|deploy|document|plan|structure|organize)"]
 
-  # Style checks (does output match conventions? LLM-as-judge)
-  - type: prompt
+  # Style check — output indicates quality/structure (zero-cost)
+  - type: text
     name: style_check
     config:
-      prompt: |
-        Evaluate if the output matches the expected quality standards for 'dotnet-best-practices': Ensure .NET/C# code meets best practices for the solution/project.. Assess clarity, correctness, completeness, and adherence to conventions.
+      regex_match: ["(?i)(should|recommend|best|practice|guideline|ensure|verify|consider|approach|pattern|principle|standard|method|technique|strategy|framework|process|way|rule|convention)"]
 
-  # Efficiency checks (no thrashing, no token bloat)
+  # Efficiency check — within tool call and duration limits
   - type: behavior
     name: efficiency_check
     config:

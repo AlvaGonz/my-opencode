@@ -13,9 +13,12 @@ Usage:
 
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env from project root (parent of src/)
+PROJECT_ROOT = Path(__file__).parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
 
 # Ensure src/ is on the path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -26,7 +29,7 @@ from llm_config import get_llm
 
 # ── PROJECT CONFIG ───────────────────────────────────────────────
 GOAL = os.getenv("GOAL", "Analyze a dataset and generate a summary report")
-OUTPUT_DIR = os.getenv("OUTPUT_DIR", "outputs")
+OUTPUT_DIR = os.getenv("OUTPUT_DIR", str(PROJECT_ROOT / "outputs"))
 SRC_DIR = os.getenv("SRC_DIR", "src")
 REQUIRES_TOOLS = os.getenv("REQUIRES_TOOLS", "false").lower() == "true"
 REQUIRES_HITL = os.getenv("REQUIRES_HITL", "false").lower() == "true"
@@ -36,46 +39,42 @@ os.makedirs(OUTPUT_DIR, exist_ok=True)
 
 
 def main():
-    print("╔══════════════════════════════════════════════════╗")
-    print("║        EvoAgentX — Workflow Runner v0.1          ║")
-    print("╠══════════════════════════════════════════════════╣")
-    print(f"║  GOAL:      {GOAL[:72]:72s} ║")
-    print(f"║  Provider:  {os.getenv('LLM_PROVIDER', 'openai'):16s}           ║")
-    print(f"║  Model:     {os.getenv('DEFAULT_MODEL', 'gpt-4o-mini'):16s}           ║")
-    print("╚══════════════════════════════════════════════════╝")
+    sep = "=" * 52
+    print(sep)
+    print("  EvoAgentX -- Workflow Runner v0.1")
+    print(sep)
+    print(f"  GOAL:      {GOAL[:72]}")
+    print(f"  Provider:  {os.getenv('LLM_PROVIDER', 'openai')}")
+    print(f"  Model:     {os.getenv('DEFAULT_MODEL', 'gpt-4o-mini')}")
+    print(sep)
     print()
-
-    # ── STEP 0: Validate environment ────────────────────────────
-    if not os.getenv("OPENAI_API_KEY"):
-        print("[WARN] OPENAI_API_KEY not set. Set it in .env or use LLM_PROVIDER=litellm.")
-        print()
 
     # ── STEP 1: Initialize LLM ──────────────────────────────────
     print("[1/4] Initializing LLM ...")
     llm, llm_config = get_llm()
-    print(f"  ✓ LLM ready: {type(llm).__name__}")
+    print(f"  OK LLM ready: {type(llm).__name__}")
     print()
 
     # ── STEP 2: Generate Workflow Graph ─────────────────────────
     print("[2/4] Generating workflow graph from goal ...")
-    generator = WorkFlowGenerator()
+    generator = WorkFlowGenerator(llm=llm)
     workflow_graph: WorkFlowGraph = generator.generate_workflow(goal=GOAL)
 
-    print(f"  ✓ Workflow graph generated")
+    print(f"  OK Workflow graph generated")
     print(f"  • Nodes: {len(workflow_graph.nodes) if hasattr(workflow_graph, 'nodes') else 'N/A'}")
     print(f"  • Edges: {len(workflow_graph.edges) if hasattr(workflow_graph, 'edges') else 'N/A'}")
 
     # Visualize
     try:
         workflow_graph.display()
-        print("  ✓ Graph visualization displayed")
+        print("  OK Graph visualization displayed")
     except Exception as e:
         print(f"  ⚠ Graph display skipped ({e})")
 
     # Persist
     graph_path = os.path.join(OUTPUT_DIR, "workflow_graph.json")
     workflow_graph.save_module(path=graph_path)
-    print(f"  ✓ Graph saved to {graph_path}")
+    print(f"  OK Graph saved to {graph_path}")
     print()
 
     # ── STEP 3: Instantiate Agents ──────────────────────────────
@@ -85,8 +84,8 @@ def main():
         workflow_graph=workflow_graph,
         llm_config=llm_config,
     )
-    print(f"  ✓ Agents instantiated")
-    print(f"  • Agents: {agent_manager.size() if hasattr(agent_manager, 'size') else 'N/A'}")
+    print(f"  OK Agents instantiated")
+    print(f"  • Agents: {agent_manager.size if hasattr(agent_manager, 'size') else 'N/A'}")
     print()
 
     # ── STEP 3b: HITL Approval Gate (optional) ─────────────────
@@ -114,7 +113,7 @@ def main():
             )
             # Wire into the workflow graph
             workflow_graph.add_node(hitl_agent)
-            print(f"  ✓ HITL gate attached before agent: {target_agent}")
+            print(f"  OK HITL gate attached before agent: {target_agent}")
         else:
             print("  ⚠ No agents found to attach HITL gate")
         print()
@@ -143,12 +142,12 @@ def main():
 
             optimizer = TextGradOptimizer(workflow=workflow, llm=llm)
             optimizer.optimize(epochs=3)
-            print("  ✓ Optimization complete")
+            print("  OK Optimization complete")
         except Exception as e:
             print(f"  ⚠ Optimization skipped ({e})")
 
     print()
-    print("✓ Workflow run complete.")
+    print("OK Workflow run complete.")
 
 
 if __name__ == "__main__":

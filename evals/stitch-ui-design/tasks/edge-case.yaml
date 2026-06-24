@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "stitch ui design: review this implementation for quality issues"
+  prompt: "Expert guidance for crafting effective prompts in Google Stitch, the AI-powered UI design tool by Google Labs. This skil..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

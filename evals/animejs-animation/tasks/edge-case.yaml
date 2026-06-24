@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "animejs animation: review this implementation for quality issues"
+  prompt: "Create and manage anime.js animations including timelines, scroll-triggered effects, staggered elements, and SVG path mo..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

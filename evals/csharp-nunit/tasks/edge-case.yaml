@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "csharp nunit: review this implementation for quality issues"
+  prompt: "Get best practices for NUnit unit testing, including data-driven tests"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

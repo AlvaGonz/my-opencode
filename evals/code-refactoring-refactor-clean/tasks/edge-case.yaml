@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "code refactoring refactor clean: review this implementation for quality issues"
+  prompt: "You are a code refactoring expert specializing in clean code principles, SOLID design patterns, and modern software engi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

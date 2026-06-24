@@ -5,9 +5,12 @@ Returns (llm_instance, llm_config) tuple based on LLM_PROVIDER.
 """
 
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
-load_dotenv()
+# Load .env from project root (parent of src/)
+PROJECT_ROOT = Path(__file__).parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
 
 
 def get_llm(model_name: str = None, stream: bool = True, output_response: bool = True):
@@ -44,13 +47,15 @@ def get_llm(model_name: str = None, stream: bool = True, output_response: bool =
 
     # ── LiteLLM ──────────────────────────────────────────────────
     elif provider == "litellm":
-        from evoagentx.models import LiteLLMConfig, LiteLLMModel
+        from evoagentx.models import LiteLLMConfig, LiteLLM
 
         config = LiteLLMConfig(
             model=model,
             stream=stream,
+            groq_key=os.getenv("GROQ_API_KEY"),
+            openai_key=os.getenv("OPENAI_API_KEY"),
         )
-        return LiteLLMModel(config=config), config
+        return LiteLLM(config=config), config
 
     # ── OpenRouter ───────────────────────────────────────────────
     elif provider == "openrouter":

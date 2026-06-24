@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "typespec api operations: review this implementation for quality issues"
+  prompt: "Add GET, POST, PATCH, and DELETE operations to a TypeSpec API plugin with proper routing, parameters, and adaptive cards"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

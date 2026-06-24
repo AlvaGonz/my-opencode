@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "csharp mstest: review this implementation for quality issues"
+  prompt: "Get best practices for MSTest 3.x/4.x unit testing, including modern assertion APIs and data-driven tests"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true
