@@ -48,15 +48,31 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 - Test if applicable
 - ⛔ STOP on failure — report and request fix approval
 
-### Post-Task Verification (Automated)
+### Post-Task Verification (Automated — post_task_loop.py)
 After quality validation passes, run the post-task verifier:
 ```bash
-python scripts/post_task_loop.py --session=$(cat agents/sessions/ACTIVE_SESSION)
+python scripts/post_task_loop.py --task "commit message or task description" --output "task output summary" --hook-mode ci
 ```
-- If exit code 0: proceed to Step 6
-- If exit code non-zero: ⛔ STOP — report failure output to user,
-  request approval to proceed or retry
-- Do NOT auto-fix post_task_loop failures
+**CLI Interface (actual argparse):**
+- `--task` — commit message or task description string
+- `--output` — task output summary string
+- `--hook-mode` — one of: `pre-commit`, `pre-push`, `ci` (default: `ci`)
+- Session is auto-detected from `agents/sessions/ACTIVE_SESSION` pointer file (no `--session` flag)
+
+**Exit code handling:**
+- Exit 0 → PASS: proceed to Step 6 (Summarize)
+- Exit 1 → FAIL/BLOCK: ⛔ STOP — parse JSON stdout, report findings to user
+  - If `verdict=BLOCK` + `high_issues > 0`: dispatch `build-error-resolver.md` with the error details
+  - If `verdict=FAIL` + `coverage_ratio < 0.2`: dispatch `tdd-guide.md` to add missing tests
+  - If `verdict=FAIL` + security findings: dispatch `security-reviewer.md` with the OWASP findings
+
+**Post-task recovery protocol:**
+1. Parse JSON output from post_task_loop.py
+2. Route recovery to the appropriate subagent based on finding categories
+3. After subagent completes fix: re-run post_task_loop.py (maximum 2 retry cycles)
+4. If still failing after 2 retries: circuit-breaker trips, HALT and report to user
+
+- Do NOT auto-fix post_task_loop failures — always present findings first
 
 ### Step 6: Summarize
 - Report what was accomplished
