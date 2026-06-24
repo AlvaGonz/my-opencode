@@ -65,64 +65,70 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 | Delegation | `workflows/task-delegation-basics.md` | Delegating to subagent |
 | Documentation | `standards/code-quality.md` | Writing documentation |
 
-## MCP Tool Routing
+## Agent Routing Registry
 
-Model Context Protocol (MCP) servers extend agent capabilities. Use the corresponding MCP tools for specific task types:
+| Agent | Trigger Condition | Delegates To | Context Loads |
+|-------|-------------------|--------------|---------------|
+| `openagent` | General requests, planning, analysis, orchestration | `planner`, `security-reviewer`, `code-reviewer`, `tdd-guide`, `architect`, `refactor-cleaner`, `build-error-resolver`, `opencoder` | (Auto-detected per task) |
+| `opencoder` | Complex coding, multi-file refactoring, execution | `ContextScout`, `ExternalScout`, `TaskManager`, `BatchExecutor`, `CoderAgent`, `TestEngineer`, `DocWriter` | `code-quality.md` (mandatory) |
+| `planner` | Feature planning & breakdown | N/A | `task-delegation-basics.md` |
+| `security-reviewer` | Security code review | N/A | `owasp-security.md` |
+| `code-reviewer` | Code quality review | N/A | `code-quality.md` |
+| `tdd-guide` | Test-driven development | `CoderAgent` | `test-coverage.md` |
+| `architect` | Architectural decisions | N/A | `architecture-decision-records.md` |
+| `refactor-cleaner`| Code refactoring | N/A | `code-quality.md` |
+| `build-error-resolver`| Build diagnostics | N/A | `error-handling.md` |
 
-| MCP Server | Trigger / Task Type | Status |
-|------------|---------------------|--------|
-| `context7-mcp` | Library documentation queries, resolving dependencies, searching external API references. | Active ✅ |
-| `github-mcp-server` | Reading/writing Pull Requests, Issues, repository searches, branching, and PR reviews. | Active ✅ |
-| `mssql` | Executing database queries, inspecting schemas, retrieving table rows from SQL Server. | Active ✅ |
-| `StitchMCP` | Managing UI screens, generating frontend screen components from text or markdown designs. | Active ✅ |
-| `awesome-copilot` | Searching and loading specific copilot instructions or configuration logic. | Active ✅ |
-| `mongodb-mcp-server` | MongoDB operations. | Disabled ⏸ |
-| `sequential-thinking` | Advanced sequential thinking steps. | Disabled ⏸ |
+## MCP Dispatch Table
 
-## EvoAgentX Integration
+| MCP Server | Trigger / Task Type |
+|------------|---------------------|
+| `context7-mcp` | Consultas de librería/docs externos, ExternalScout tasks |
+| `github-mcp-server` | Operaciones GitHub (PR, issues, commits) |
+| `mssql` | Queries de base de datos SQL Server |
+| `StitchMCP` | Tareas de UI/diseño con Google Stitch |
+| `awesome-copilot` | Tareas de autocompletado/sugerencia de código |
 
-EvoAgentX is a dynamic multi-agent framework integrated via `evoagentx/`. It differs from standard ECC subagents by dynamically generating workflows and agents based on goals.
+## EvoAgentX Bridge
 
-### Available Features
-- **Dynamic Workflow Generation**: Translates goals into a graph of specialized agents.
-- **Human-In-The-Loop (HITL)**: Pre-execution approval gates (`REQUIRES_HITL`).
-- **TextGrad Optimizer**: Iterative prompt optimization (`REQUIRES_OPTIMIZER`).
+**Cuándo invocar EvoAgentX:**
+- Tareas con goal abierto que requieren plan autogenerado
+- Workflows de análisis de datos
+- Tareas con `REQUIRES_HITL=true`
 
-### Dispatch Conditions (When to use EvoAgentX vs ECC Subagents)
-- **Use EvoAgentX when**:
-  - The task is highly exploratory, analytical, or open-ended (e.g., "Analyze a dataset and generate a summary report").
-  - The workflow requires dynamic agent instantiation.
-  - LLM-driven graph routing is needed to solve multi-step research or reasoning goals.
-- **Use ECC Subagents when**:
-  - The task is a well-defined software engineering step (e.g., code, test, security review, architecture).
-  - You need deterministic context loading (e.g., strict adherence to `code-quality.md`).
-  - Working within the established repo structure with predictable file changes.
+**Cómo invocar:**
+Ejecutar el comando en bash:
+`bash evoagentx/src/workflow_runner.py` con la variable de entorno `GOAL`.
 
-## ECC Integration
+**Output:** 
+El resultado se guarda en `evoagentx/outputs/workflow_graph.json`.
 
-### Available Subagents
-| Subagent | Purpose | Context Loads |
-|----------|---------|--------------|
-| `planner` | Feature planning & breakdown | `task-delegation-basics.md` |
-| `security-reviewer` | Security code review | `owasp-security.md` |
-| `code-reviewer` | Code quality review | `code-quality.md` |
-| `tdd-guide` | Test-driven development | `test-coverage.md` |
-| `architect` | Architectural decisions | `architecture-decision-records.md` |
-| `refactor-cleaner` | Code refactoring | `code-quality.md` |
-| `build-error-resolver` | Build diagnostics | `error-handling.md` |
+## Skill Index
 
-### Available ECC Skills (in `skills/ecc/`)
-- `coding-standards` — code quality enforcement
-- `security-review` — security vulnerability detection
-- `tdd-workflow` — TDD workflow enforcement
-- `verification-loop` — quality verification
-- `backend-patterns` — backend architecture patterns
-- `api-design` — API design principles
-- `error-handling` — error handling patterns
-- `deployment-patterns` — deployment best practices
-- `architecture-decision-records` — ADR practices
+| Skill Dir | Trigger | Tech |
+|-----------|---------|------|
+| `csharp-mstest` | Testing with MSTest | C# |
+| `csharp-nunit` | Testing with NUnit | C# |
+| `csharp-tunit` | Testing with TUnit | C# |
+| `csharp-xunit` | Testing with xUnit | C# |
+| `csharp-async` | Async patterns | C# |
+| `csharp-docs` | Documentation | C# |
+| `dotnet-best-practices` | Best practices in .NET | .NET |
+| `dotnet-design-pattern-review` | Design patterns | .NET |
+| `dotnet-upgrade` | Upgrading .NET versions | .NET |
+| `react-best-practices` | React component building | React |
+| `owasp-security` | Security audits/reviews | Security |
+| `task-management` | Breaking down tasks | PM |
+| `mcp-builder` | Building MCP servers | TS/MCP |
+| `mcp-builder-ms` | Building MS MCP servers | TS/MCP |
+| `git-advanced-workflows` | Complex Git operations | Git |
+| `git-pr-workflows-git-workflow` | Pull Requests | Git |
+| `sql-optimization-patterns` | Query optimization | SQL |
+| `architecture-patterns` | System design | Arch |
+| `test-driven-development` | TDD tasks | Testing |
+| `frontend-design` | UI/UX implementation | Frontend |
 
-### Available Commands (in `command/`)
+## Available Commands (in `command/`)
 - `tdd` — Run TDD workflow
 - `security` — Run security review
 - `code-review` — Run code quality review
@@ -156,6 +162,7 @@ task(
 // Execute ECC commands
 command("tdd --coverage --parallel")
 ```
+
 ## Prompt Library
 
 The central repository for model-specific prompts has been consolidated into `agents/core/prompts/`.
