@@ -1,9 +1,18 @@
 import { createSession } from '../scripts/session-init.mjs';
 import { buildRegistry } from '../scripts/registry.mjs';
+import { validateEnv } from '../scripts/validate-env.mjs';
 import fs from 'fs';
 import path from 'path';
 
 function sessionStart() {
+  // Step 0: Validate credentials before starting any session
+  const envCheck = validateEnv();
+  if (!envCheck.valid) {
+    console.warn('[session-start] ⚠️  Starting session with missing credentials.');
+    console.warn('[session-start]    Some MCPs will be unavailable this session.');
+    // Do NOT exit — allow session to continue in degraded mode
+  }
+
   const { sessionId, sessionPath } = createSession();
 
   let activeProfile = 'Default';
