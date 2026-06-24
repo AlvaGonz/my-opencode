@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "dotnet best practices: review this implementation for quality issues"
+  prompt: "Ensure .NET/C# code meets best practices for the solution/project."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

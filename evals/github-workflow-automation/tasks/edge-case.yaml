@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "github workflow automation: review this implementation for quality issues"
+  prompt: "Patterns for automating GitHub workflows with AI assistance, inspired by [Gemini CLI](https://github.com/google-gemini/g..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

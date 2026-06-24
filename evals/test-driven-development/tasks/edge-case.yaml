@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "test driven development: review this implementation for quality issues"
+  prompt: "Use when implementing any feature or bugfix, before writing implementation code"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

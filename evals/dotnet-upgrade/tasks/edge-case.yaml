@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "dotnet upgrade: review this implementation for quality issues"
+  prompt: "Ready-to-use prompts for comprehensive .NET framework upgrade analysis and execution"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

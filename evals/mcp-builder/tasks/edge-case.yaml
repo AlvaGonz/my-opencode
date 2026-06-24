@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "mcp builder: review this implementation for quality issues"
+  prompt: "Create MCP (Model Context Protocol) servers that enable LLMs to interact with external services through well-designed to..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

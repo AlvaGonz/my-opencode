@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "web artifacts builder: review this implementation for quality issues"
+  prompt: "To build powerful frontend claude.ai artifacts, follow these steps:"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

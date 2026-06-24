@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "github issue creator: review this implementation for quality issues"
+  prompt: "Turn error logs, screenshots, voice notes, and rough bug reports into crisp, developer-ready GitHub issues with repro st..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

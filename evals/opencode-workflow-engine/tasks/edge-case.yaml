@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "opencode workflow engine: review this implementation for quality issues"
+  prompt: "Orchestrate OpenCode sessions through guided multi-phase workflows: feature delivery, security audits, AI agent evolutio..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

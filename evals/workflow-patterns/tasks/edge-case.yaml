@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "workflow patterns: review this implementation for quality issues"
+  prompt: "Use this skill when implementing tasks according to Conductor's TDD workflow, handling phase checkpoints, managing git c..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

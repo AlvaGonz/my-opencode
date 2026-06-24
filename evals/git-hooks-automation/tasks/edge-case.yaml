@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git hooks automation: review this implementation for quality issues"
+  prompt: "Master Git hooks setup with Husky, lint-staged, pre-commit framework, and commitlint. Automate code quality gates, forma..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

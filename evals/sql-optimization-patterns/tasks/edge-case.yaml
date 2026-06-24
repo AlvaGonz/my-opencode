@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "sql optimization patterns: review this implementation for quality issues"
+  prompt: "Optimize SQL queries, design database indexes, debug slow queries, fix N+1 problems, read execution plans, and improve o..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

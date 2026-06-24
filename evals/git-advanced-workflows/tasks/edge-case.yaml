@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git advanced workflows: review this implementation for quality issues"
+  prompt: "Master advanced Git techniques to maintain clean history, collaborate effectively, and recover from any situation with c..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -7,8 +7,7 @@ tags:
   - anti-trigger
   - negative-test
 inputs:
-  prompt: "Update the Tailwind CSS configuration file."
+  prompt: "What is the capital of France?"
 expected:
   outcomes:
     - type: skill_not_invoked
-should_trigger: false

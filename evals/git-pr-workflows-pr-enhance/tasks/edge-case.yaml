@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git pr workflows pr enhance: review this implementation for quality issues"
+  prompt: "You are a PR optimization expert specializing in creating high-quality pull requests that facilitate efficient code revi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

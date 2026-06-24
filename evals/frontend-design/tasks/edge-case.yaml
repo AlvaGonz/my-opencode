@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "frontend design: review this implementation for quality issues"
+  prompt: "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

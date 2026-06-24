@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "api design principles: review this implementation for quality issues"
+  prompt: "Design and review REST APIs with best practices for versioning, error handling, pagination, OpenAPI specifications, and ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

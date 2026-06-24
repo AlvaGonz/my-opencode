@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git pr workflows git workflow: review this implementation for quality issues"
+  prompt: "Orchestrate a comprehensive git workflow from code review through PR creation, leveraging specialized agents for quality..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

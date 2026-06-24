@@ -11,4 +11,3 @@ inputs:
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

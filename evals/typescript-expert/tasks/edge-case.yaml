@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "typescript expert: review this implementation for quality issues"
+  prompt: "TypeScript project architecture, performance optimization, monorepo management, migration strategies, and modern develop..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

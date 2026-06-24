@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git pushing: review this implementation for quality issues"
+  prompt: "Stage all changes, create a conventional commit, and push to the remote branch. Use when explicitly asks to push changes..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

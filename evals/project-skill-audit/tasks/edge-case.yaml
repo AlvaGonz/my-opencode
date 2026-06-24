@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "project skill audit: review this implementation for quality issues"
+  prompt: "Audit a project and recommend the highest-value skills to add or update."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

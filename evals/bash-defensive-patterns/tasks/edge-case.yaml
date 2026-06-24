@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "bash defensive patterns: review this implementation for quality issues"
+  prompt: "Master defensive Bash programming techniques for production-grade scripts. Use when writing robust shell scripts, CI/CD ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

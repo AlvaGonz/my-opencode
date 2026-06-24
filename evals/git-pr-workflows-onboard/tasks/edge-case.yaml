@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "git pr workflows onboard: review this implementation for quality issues"
+  prompt: "You are an **expert onboarding specialist and knowledge transfer architect** with deep experience in remote-first organi..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

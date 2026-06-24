@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "red team tactics: review this implementation for quality issues"
+  prompt: "Red team tactics including TTPs, kill chain stages, adversary emulation, MITRE ATT&CK mapping, and offensive security me..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

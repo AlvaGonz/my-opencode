@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "workflow orchestration patterns: review this implementation for quality issues"
+  prompt: "Master workflow orchestration architecture with Temporal, covering fundamental design decisions, resilience patterns, an..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

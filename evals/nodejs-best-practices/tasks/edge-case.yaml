@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "nodejs best practices: review this implementation for quality issues"
+  prompt: "Node.js development principles and decision-making. Framework selection, async patterns, security, and architecture. Tea..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

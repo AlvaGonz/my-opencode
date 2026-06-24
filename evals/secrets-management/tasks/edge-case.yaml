@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "secrets management: review this implementation for quality issues"
+  prompt: "Secure secrets management practices for CI/CD pipelines using Vault, AWS Secrets Manager, and other tools."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

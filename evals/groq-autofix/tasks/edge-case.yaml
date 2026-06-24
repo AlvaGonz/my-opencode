@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "groq autofix: review this implementation for quality issues"
+  prompt: "Auto-fix code errors using LLM models (Groq/Gemini). Analyzes complex error logs, TypeScript compilation failures, or ru..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

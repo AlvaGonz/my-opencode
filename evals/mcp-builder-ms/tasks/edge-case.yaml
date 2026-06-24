@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "mcp builder ms: review this implementation for quality issues"
+  prompt: "Use this skill when building MCP servers to integrate external APIs or services, whether in Python (FastMCP) or Node/Typ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

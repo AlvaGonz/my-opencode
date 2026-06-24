@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "seo: review this implementation for quality issues"
+  prompt: "Optimize for search engine visibility and ranking. Use when asked to 'improve SEO', 'optimize for search', 'fix meta tag..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

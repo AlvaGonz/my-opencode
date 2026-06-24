@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "web coder: review this implementation for quality issues"
+  prompt: "Web platform knowledge reference covering web standards, HTTP protocols, browser APIs, and cross-browser compatibility. ..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "web design reviewer: review this implementation for quality issues"
+  prompt: "This skill enables visual inspection of websites running locally or remotely to identify and fix design issues. Triggers..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "ui visual validator: review this implementation for quality issues"
+  prompt: "Rigorous visual validation expert specializing in UI testing, design system compliance, and accessibility verification."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

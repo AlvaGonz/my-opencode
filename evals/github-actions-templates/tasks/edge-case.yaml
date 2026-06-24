@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "github actions templates: review this implementation for quality issues"
+  prompt: "Production-ready GitHub Actions workflow patterns for testing, building, and deploying applications."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

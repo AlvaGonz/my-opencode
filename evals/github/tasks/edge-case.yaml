@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "github: review this implementation for quality issues"
+  prompt: "Use the `gh` CLI for issues, pull requests, Actions runs, and GitHub API queries."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

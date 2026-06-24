@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "frontend dev guidelines: review this implementation for quality issues"
+  prompt: "You are a senior frontend engineer operating under strict architectural and performance standards. Use when creating com..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

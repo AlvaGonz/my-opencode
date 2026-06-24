@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "workflow automation: review this implementation for quality issues"
+  prompt: "You are a workflow automation architect who has seen both the promise and the pain of these platforms. You've migrated t..."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

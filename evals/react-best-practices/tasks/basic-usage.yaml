@@ -7,8 +7,7 @@ tags:
   - happy-path
   - positive-trigger
 inputs:
-  prompt: "Optimize this React dashboard component for rendering performance."
+  prompt: "Help me apply the react-best-practices skill: React and Next.js performance optimization guidelines from Vercel Engineering. This skill should be used when writing, reviewing, or refactoring React/Next.js code to ensure optimal performance patter"
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true

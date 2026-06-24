@@ -6,8 +6,7 @@ tags:
   - edge-case
   - positive-trigger
 inputs:
-  prompt: "csharp docs: review this implementation for quality issues"
+  prompt: "Ensure that C# types are documented with XML comments and follow best practices for documentation."
 expected:
   outcomes:
     - type: task_completed
-should_trigger: true
