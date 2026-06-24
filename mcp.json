@@ -10,7 +10,7 @@
         "MSSQL_HOST": "localhost",
         "MSSQL_PORT": "1433",
         "MSSQL_USER": "sa",
-        "MSSQL_PASSWORD": "<your-password>",
+        "MSSQL_PASSWORD": "$env:MSSQL_PASSWORD",
         "MSSQL_DATABASE": "AppDb"
       },
       "disabled": false
@@ -26,7 +26,7 @@
         "ghcr.io/github/github-mcp-server"
       ],
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "<your-github-token>"
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "$env:GITHUB_PERSONAL_ACCESS_TOKEN"
       },
       "autoApprove": [],
       "disabledTools": [
@@ -43,7 +43,7 @@
         "mongodb-mcp-server"
       ],
       "env": {
-        "MDB_MCP_CONNECTION_STRING": "<your-mongodb-connection-string>"
+        "MDB_MCP_CONNECTION_STRING": "$env:MONGODB_CONNECTION_STRING"
       },
       "disabled": true
     },
@@ -80,7 +80,7 @@
         "query-docs"
       ],
       "env": {
-        "CONTEXT7_API_KEY": "<your-context7-api-key>"
+        "CONTEXT7_API_KEY": "$env:CONTEXT7_API_KEY"
       }
     },
     "StitchMCP": {
@@ -91,7 +91,7 @@
         "mcp-remote",
         "https://stitch.googleapis.com/mcp",
         "--header",
-        "X-Goog-Api-Key: <your-gcp-api-key>"
+        "X-Goog-Api-Key: $env:GCP_API_KEY"
       ],
       "env": {},
       "disabled": false
