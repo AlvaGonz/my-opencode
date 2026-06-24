@@ -1,0 +1,21 @@
+# Environment
+.env
+.env.local
+*.env
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+
+# Outputs
+outputs/*
+!outputs/.gitkeep
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
