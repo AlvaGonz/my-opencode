@@ -192,11 +192,12 @@ if ($targetMissing.Count -gt 0) {
 }
 
 Write-Host ""
-Write-Host "${BOLD}╔══════════════════════════════════════════════╗${RESET}"
-Write-Host "${BOLD}║  SYNC COMPLETE                               ║${RESET}"
-Write-Host "${BOLD}╚══════════════════════════════════════════════╝${RESET}"
-Write-Host ""
-Write-Host "  ${BOLD}Agent live at:${RESET} $Target"
-Write-Host "  ${BOLD}Active profile:${RESET} run node scripts/activate-profile.mjs <name>"
-Write-Host "  ${BOLD}Start session:${RESET}  node hooks/session-start.mjs"
-Write-Host ""
+Write-Host ''
+Write-Host '╔══════════════════════════════════════════════╗' -ForegroundColor Cyan
+Write-Host '║  SYNC COMPLETE                               ║' -ForegroundColor Cyan
+Write-Host '╚══════════════════════════════════════════════╝' -ForegroundColor Cyan
+Write-Host ''
+Write-Host '  Agent live at: ' -NoNewline; Write-Host $Target
+Write-Host '  Active profile: run node scripts/activate-profile.mjs [name]'
+Write-Host '  Start session:  node hooks/session-start.mjs'
+Write-Host ''
