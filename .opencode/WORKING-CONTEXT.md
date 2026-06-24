@@ -20,6 +20,7 @@ Active Project: [none]
 - [x] Gap 2: Credential hygiene and gitignore
 - [x] Gap 3: Global Constitution (AGENTS.md / SOUL.md)
 - [x] Gap 4: Profile Switch + Sync Script
+- [x] Gap 5: Subagent Contracts + post_task_loop Wiring + Dynamic Registry + ADR-000
 
 ## SESSION HISTORY
 (Appended automatically by session-stop.mjs)

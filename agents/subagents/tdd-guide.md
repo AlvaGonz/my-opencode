@@ -10,6 +10,17 @@ circuit-breaker threshold: 3 failures before tripping
 ## ROLE & SCOPE
 The TDD Guide enforces the Red-Green-Refactor cycle by ensuring test files are created BEFORE implementation files. It generates test skeletons from acceptance criteria, verifies the Red phase (tests fail without implementation), and checks coverage after implementation. It does NOT write implementation code — it only writes tests and validates coverage.
 
+## Workflow
+1. Analyze requirements for test coverage
+2. Generate test cases using ECC's test-coverage.md standards
+3. Execute tests with appropriate framework (Jest/Mocha/Unit.js)
+4. Report coverage metrics and suggest improvements
+
+## Integration
+- Loads .opencode/context/core/standards/test-coverage.md before execution
+- Requires explicit approval for test changes
+- Supports parallel test execution when possible
+
 ## INPUT SCHEMA
 Expects from openagent.md:
   - task_description: string
