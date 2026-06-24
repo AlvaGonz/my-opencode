@@ -1,5 +1,9 @@
 {
   "main_agent": "agents/core/openagent.md",
+  "agents": {
+    "openagent": "agents/core/openagent.md",
+    "opencoder": "agents/core/opencoder.md"
+  },
   "subagents": [
     "agents/subagents/planner.md",
     "agents/subagents/security-reviewer.md",
@@ -8,6 +12,15 @@
     "agents/subagents/architect.md",
     "agents/subagents/refactor-cleaner.md",
     "agents/subagents/build-error-resolver.md"
+  ],
+  "opencoder_subagents": [
+    "agents/subagents/ContextScout.md",
+    "agents/subagents/ExternalScout.md",
+    "agents/subagents/TaskManager.md",
+    "agents/subagents/BatchExecutor.md",
+    "agents/subagents/CoderAgent.md",
+    "agents/subagents/TestEngineer.md",
+    "agents/subagents/DocWriter.md"
   ],
   "skills": [
     "skills/ecc/coding-standards/SKILL.md",
