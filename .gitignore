@@ -1,0 +1,34 @@
+── Credentials & Environment ─────────────────────────────────
+.env
+.env.local
+.env.*.local
+config.toml # OpenCode local config with real MCP keys
+
+── Runtime Artifacts (never version these) ───────────────────
+machine-report.json
+agents-lock.json
+skills-lock.json
+
+── Session & Log Directories ─────────────────────────────────
+agents/sessions/
+sessions/
+logs/
+.tmp/
+
+── Python Artifacts ──────────────────────────────────────────
+scripts/__pycache__/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+evoagentx/__pycache__/
+evoagentx/outputs/
+
+── Node.js Artifacts ─────────────────────────────────────────
+node_modules/
+
+── OS & Editor ───────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/settings.json
