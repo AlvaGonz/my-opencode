@@ -2,7 +2,7 @@
 name: planner
 description: Expert planning specialist for complex features and refactoring. Use PROACTIVELY when users request feature implementation, architectural changes, or complex refactoring.
 
-model: opus
+model: groq/meta-llama/llama-4-scout-17b-16e-instruct
 source: https://github.com/affaan-m/ECC
 ---
 

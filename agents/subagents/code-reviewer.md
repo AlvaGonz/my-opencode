@@ -2,7 +2,7 @@
 name: code-reviewer
 description: Expert code review specialist. Proactively reviews code for quality, security, and maintainability. MUST BE USED for all code changes.
 
-model: sonnet
+model: groq/meta-llama/llama-4-scout-17b-16e-instruct
 source: https://github.com/affaan-m/ECC
 ---
 

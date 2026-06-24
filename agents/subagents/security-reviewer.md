@@ -2,7 +2,7 @@
 name: security-reviewer
 description: Security vulnerability detection and remediation. Use PROACTIVELY after writing code that handles user input, authentication, API endpoints, or sensitive data.
 
-model: sonnet
+model: groq/meta-llama/llama-4-scout-17b-16e-instruct
 source: https://github.com/affaan-m/ECC
 ---
 
