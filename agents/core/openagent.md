@@ -156,3 +156,17 @@ task(
 // Execute ECC commands
 command("tdd --coverage --parallel")
 ```
+## Prompt Library
+
+The central repository for model-specific prompts has been consolidated into `agents/core/prompts/`.
+
+| Prompt Name | File Path | Trigger Condition |
+|-------------|-----------|-------------------|
+| OpenAgent Gemini | `agents/core/prompts/core/openagent/gemini.md` | When using OpenAgent with Gemini model |
+| OpenAgent GPT | `agents/core/prompts/core/openagent/gpt.md` | When using OpenAgent with GPT model |
+| OpenCoder Gemini | `agents/core/prompts/core/opencoder/gemini.md` | When using OpenCoder with Gemini model |
+| Copywriter | `agents/core/prompts/content/copywriter/README.md` | When generating marketing/content copy |
+| Tech Writer | `agents/core/prompts/content/technical-writer/README.md` | When writing technical documentation |
+| Data Analyst | `agents/core/prompts/data/data-analyst/README.md` | When analyzing datasets or generating reports |
+| DevOps Specialist | `agents/core/prompts/development/devops-specialist/README.md` | When working on CI/CD or infrastructure |
+| Frontend Specialist | `agents/core/prompts/development/frontend-specialist/README.md` | When building UI components |
