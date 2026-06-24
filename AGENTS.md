@@ -50,8 +50,8 @@ This is the global OpenCode agent configuration for Adrian Alvarez. It lives at 
   │   ├── validate-env.mjs         ← Pre-flight credential check
   │   ├── session-init.mjs         ← Session ID + directory creation
   │   ├── registry.mjs             ← Builds skills-lock + agents-lock (gitignored)
-  │   ├── activate-profile.mjs     ← Project switch (Gap 4 — pending)
-  │   ├── sync.ps1                 ← Repo → ~/.opencode sync (Gap 4 — pending)
+  │   ├── activate-profile.mjs     ← Project switch
+  │   ├── sync.ps1                 ← Repo → ~/.opencode sync
   │   ├── approval-gate.mjs        ← Blocks execution until human approves
   │   ├── circuit-breaker.mjs      ← Stops agent on repeated failure
   │   └── post_task_loop.py        ← Post-execution verifier (Step 5 of workflow)
@@ -105,7 +105,7 @@ This is the global OpenCode agent configuration for Adrian Alvarez. It lives at 
 ## 7. PROJECT SWITCH PROTOCOL
 
   When switching to a new project:
-  □ Run: node scripts/activate-profile.mjs <profile>  [Gap 4 — pending]
+  □ Run: node scripts/activate-profile.mjs <profile>
   □ Copy project's .env variables into local ~/.opencode/.env
   □ Verify: node scripts/validate-env.mjs
   □ Start session: node hooks/session-start.mjs

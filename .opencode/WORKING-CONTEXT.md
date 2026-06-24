@@ -19,7 +19,7 @@ Active Project: [none]
 - [x] Gap 1: Registry and Lifecycle wiring
 - [x] Gap 2: Credential hygiene and gitignore
 - [x] Gap 3: Global Constitution (AGENTS.md / SOUL.md)
-- [ ] Gap 4: Profile Switch + Sync Script
+- [x] Gap 4: Profile Switch + Sync Script
 
 ## SESSION HISTORY
 (Appended automatically by session-stop.mjs)
