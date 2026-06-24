@@ -1,119 +1,87 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "model": "anthropic/claude-sonnet-4-5",
-  "small_model": "anthropic/claude-haiku-4-5",
   "default_agent": "openagent",
+  "instructions": [
+    "AGENTS.md",
+    "SOUL.md",
+    ".opencode/WORKING-CONTEXT.md"
+  ],
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "write": "allow"
+  },
   "mcp": {
-    "mssql": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mssql-mcp@latest"
-      ],
+    "context7": {
+      "type": "local",
+      "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
+      "enabled": true,
       "env": {
-        "MSSQL_HOST": "localhost",
-        "MSSQL_PORT": "1433",
-        "MSSQL_USER": "sa",
-        "MSSQL_PASSWORD": "{env:MSSQL_PASSWORD}",
-        "MSSQL_DATABASE": "AppDb"
-      },
-      "disabled": false
+        "DEFAULT_MINIMUM_TOKENS": "5000"
+      }
     },
     "github-mcp-server": {
-      "command": "docker",
-      "args": [
-        "run",
-        "-i",
-        "--rm",
-        "-e",
-        "GITHUB_PERSONAL_ACCESS_TOKEN",
-        "ghcr.io/github/github-mcp-server"
-      ],
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "enabled": true,
       "env": {
-        "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
-      },
-      "autoApprove": [],
-      "disabledTools": [
-        "assign_copilot_to_issue",
-        "get_teams",
-        "add_comment_to_pending_review"
-      ],
-      "disabled": false
+        "GITHUB_TOKEN": "{env:GITHUB_TOKEN}"
+      }
     },
-    "mongodb-mcp-server": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mongodb-mcp-server"
-      ],
+    "mssql": {
+      "type": "local",
+      "command": ["npx", "-y", "mssql-mcp@latest"],
+      "enabled": true,
       "env": {
-        "MDB_MCP_CONNECTION_STRING": "{env:MONGODB_CONNECTION_STRING}"
-      },
-      "disabled": true
+        "MSSQL_HOST": "{env:MSSQL_HOST}",
+        "MSSQL_PORT": "{env:MSSQL_PORT}",
+        "MSSQL_USER": "{env:MSSQL_USER}",
+        "MSSQL_PASSWORD": "{env:MSSQL_PASSWORD}",
+        "MSSQL_DATABASE": "{env:MSSQL_DATABASE}"
+      }
+    },
+    "sequential-thinking": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "enabled": false
     },
     "awesome-copilot": {
-      "command": "docker",
-      "args": [
+      "type": "local",
+      "command": [
+        "docker",
         "run",
         "-i",
         "--rm",
         "-e",
         "Logging__LogLevel__Default=Error",
         "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"
-      ]
+      ],
+      "enabled": true
     },
-    "sequential-thinking": {
-      "command": "npx",
-      "args": [
+    "mongodb-mcp-server": {
+      "type": "local",
+      "command": [
+        "npx",
         "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
+        "mongodb-mcp-server"
       ],
-      "env": {},
-      "disabled": true,
-      "autoApprove": []
-    },
-    "context7-mcp": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "@upstash/context7-mcp"
-      ],
-      "disabled": false,
-      "autoApprove": [
-        "resolve-library-id",
-        "query-docs"
-      ],
+      "enabled": false,
       "env": {
-        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+        "MDB_MCP_CONNECTION_STRING": "{env:MONGODB_CONNECTION_STRING}"
       }
     },
     "StitchMCP": {
-      "$typeName": "exa.cascade_plugins_pb.CascadePluginCommandTemplate",
-      "command": "npx",
-      "args": [
+      "type": "local",
+      "command": [
+        "npx",
         "-y",
         "mcp-remote",
         "https://stitch.googleapis.com/mcp",
         "--header",
         "X-Goog-Api-Key: {env:GCP_API_KEY}"
       ],
-      "env": {},
-      "disabled": false
+      "enabled": true
     }
-  },
-  "permission": {
-    "bash": "allow",
-    "edit": "allow",
-    "write": "allow"
-  },
-  "instructions": [
-    ".opencode/WORKING-CONTEXT.md",
-    "AGENTS.md",
-    "SOUL.md"
-  ],
-  "compaction": {
-    "auto": true,
-    "prune": false
-  },
-  "shell": "pwsh"
+  }
 }
