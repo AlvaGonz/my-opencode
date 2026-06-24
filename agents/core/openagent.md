@@ -65,6 +65,25 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 | Delegation | `workflows/task-delegation-basics.md` | Delegating to subagent |
 | Documentation | `standards/code-quality.md` | Writing documentation |
 
+## EvoAgentX Integration
+
+EvoAgentX is a dynamic multi-agent framework integrated via `evoagentx/`. It differs from standard ECC subagents by dynamically generating workflows and agents based on goals.
+
+### Available Features
+- **Dynamic Workflow Generation**: Translates goals into a graph of specialized agents.
+- **Human-In-The-Loop (HITL)**: Pre-execution approval gates (`REQUIRES_HITL`).
+- **TextGrad Optimizer**: Iterative prompt optimization (`REQUIRES_OPTIMIZER`).
+
+### Dispatch Conditions (When to use EvoAgentX vs ECC Subagents)
+- **Use EvoAgentX when**:
+  - The task is highly exploratory, analytical, or open-ended (e.g., "Analyze a dataset and generate a summary report").
+  - The workflow requires dynamic agent instantiation.
+  - LLM-driven graph routing is needed to solve multi-step research or reasoning goals.
+- **Use ECC Subagents when**:
+  - The task is a well-defined software engineering step (e.g., code, test, security review, architecture).
+  - You need deterministic context loading (e.g., strict adherence to `code-quality.md`).
+  - Working within the established repo structure with predictable file changes.
+
 ## ECC Integration
 
 ### Available Subagents
