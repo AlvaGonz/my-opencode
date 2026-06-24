@@ -65,6 +65,20 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 | Delegation | `workflows/task-delegation-basics.md` | Delegating to subagent |
 | Documentation | `standards/code-quality.md` | Writing documentation |
 
+## MCP Tool Routing
+
+Model Context Protocol (MCP) servers extend agent capabilities. Use the corresponding MCP tools for specific task types:
+
+| MCP Server | Trigger / Task Type | Status |
+|------------|---------------------|--------|
+| `context7-mcp` | Library documentation queries, resolving dependencies, searching external API references. | Active ✅ |
+| `github-mcp-server` | Reading/writing Pull Requests, Issues, repository searches, branching, and PR reviews. | Active ✅ |
+| `mssql` | Executing database queries, inspecting schemas, retrieving table rows from SQL Server. | Active ✅ |
+| `StitchMCP` | Managing UI screens, generating frontend screen components from text or markdown designs. | Active ✅ |
+| `awesome-copilot` | Searching and loading specific copilot instructions or configuration logic. | Active ✅ |
+| `mongodb-mcp-server` | MongoDB operations. | Disabled ⏸ |
+| `sequential-thinking` | Advanced sequential thinking steps. | Disabled ⏸ |
+
 ## EvoAgentX Integration
 
 EvoAgentX is a dynamic multi-agent framework integrated via `evoagentx/`. It differs from standard ECC subagents by dynamically generating workflows and agents based on goals.
