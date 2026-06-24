@@ -1,42 +1,119 @@
 {
-  "main_agent": "agents/core/openagent.md",
-  "agents": {
-    "openagent": "agents/core/openagent.md",
-    "opencoder": "agents/core/opencoder.md"
+  "$schema": "https://opencode.ai/config.json",
+  "model": "anthropic/claude-sonnet-4-5",
+  "small_model": "anthropic/claude-haiku-4-5",
+  "default_agent": "openagent",
+  "mcp": {
+    "mssql": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mssql-mcp@latest"
+      ],
+      "env": {
+        "MSSQL_HOST": "localhost",
+        "MSSQL_PORT": "1433",
+        "MSSQL_USER": "sa",
+        "MSSQL_PASSWORD": "{env:MSSQL_PASSWORD}",
+        "MSSQL_DATABASE": "AppDb"
+      },
+      "disabled": false
+    },
+    "github-mcp-server": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "{env:GITHUB_PERSONAL_ACCESS_TOKEN}"
+      },
+      "autoApprove": [],
+      "disabledTools": [
+        "assign_copilot_to_issue",
+        "get_teams",
+        "add_comment_to_pending_review"
+      ],
+      "disabled": false
+    },
+    "mongodb-mcp-server": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mongodb-mcp-server"
+      ],
+      "env": {
+        "MDB_MCP_CONNECTION_STRING": "{env:MONGODB_CONNECTION_STRING}"
+      },
+      "disabled": true
+    },
+    "awesome-copilot": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "Logging__LogLevel__Default=Error",
+        "ghcr.io/microsoft/mcp-dotnet-samples/awesome-copilot:latest"
+      ]
+    },
+    "sequential-thinking": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
+      "env": {},
+      "disabled": true,
+      "autoApprove": []
+    },
+    "context7-mcp": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@upstash/context7-mcp"
+      ],
+      "disabled": false,
+      "autoApprove": [
+        "resolve-library-id",
+        "query-docs"
+      ],
+      "env": {
+        "CONTEXT7_API_KEY": "{env:CONTEXT7_API_KEY}"
+      }
+    },
+    "StitchMCP": {
+      "$typeName": "exa.cascade_plugins_pb.CascadePluginCommandTemplate",
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://stitch.googleapis.com/mcp",
+        "--header",
+        "X-Goog-Api-Key: {env:GCP_API_KEY}"
+      ],
+      "env": {},
+      "disabled": false
+    }
   },
-  "subagents": [
-    "agents/subagents/planner.md",
-    "agents/subagents/security-reviewer.md",
-    "agents/subagents/code-reviewer.md",
-    "agents/subagents/tdd-guide.md",
-    "agents/subagents/architect.md",
-    "agents/subagents/refactor-cleaner.md",
-    "agents/subagents/build-error-resolver.md"
+  "permission": {
+    "bash": "allow",
+    "edit": "allow",
+    "write": "allow"
+  },
+  "instructions": [
+    ".opencode/WORKING-CONTEXT.md",
+    "AGENTS.md",
+    "SOUL.md"
   ],
-  "opencoder_subagents": [
-    "agents/subagents/ContextScout.md",
-    "agents/subagents/ExternalScout.md",
-    "agents/subagents/TaskManager.md",
-    "agents/subagents/BatchExecutor.md",
-    "agents/subagents/CoderAgent.md",
-    "agents/subagents/TestEngineer.md",
-    "agents/subagents/DocWriter.md"
-  ],
-  "skills": [
-    "skills/task-management"
-  ],
-  "commands": [
-    "command/tdd.md",
-    "command/security.md",
-    "command/code-review.md",
-    "command/verify.md",
-    "command/refactor-clean.md",
-    "command/build-fix.md",
-    "command/orchestrate.md"
-  ],
-  "context_root": ".opencode/context",
-  "approval_gates": true,
-  "parallel_execution": true,
-  "active_profile": "developer",
-  "profile_activated_at": "2026-06-24T04:35:41.433Z"
+  "compaction": {
+    "auto": true,
+    "prune": false
+  },
+  "shell": "pwsh"
 }
