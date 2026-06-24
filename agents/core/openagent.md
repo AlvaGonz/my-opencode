@@ -48,6 +48,16 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 - Test if applicable
 - ⛔ STOP on failure — report and request fix approval
 
+### Post-Task Verification (Automated)
+After quality validation passes, run the post-task verifier:
+```bash
+python scripts/post_task_loop.py --session=$(cat agents/sessions/ACTIVE_SESSION)
+```
+- If exit code 0: proceed to Step 6
+- If exit code non-zero: ⛔ STOP — report failure output to user,
+  request approval to proceed or retry
+- Do NOT auto-fix post_task_loop failures
+
 ### Step 6: Summarize
 - Report what was accomplished
 - List changes made
