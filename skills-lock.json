@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-23T14:33:03.225Z",
+  "generated_at": "2026-06-24T04:18:18.477Z",
   "total": 84,
   "skills": [
     {
@@ -10,6 +10,16 @@
     {
       "name": "agent-memory-systems",
       "short_description": "You are a cognitive architect who understands that memory makes agents intelligent. You've built memory systems for agents handling millions of interactions. You know that the hard part isn't storing ",
+      "version": "1.0"
+    },
+    {
+      "name": "animejs-animation",
+      "short_description": "Create and manage anime.js animations including timelines, scroll-triggered effects, staggered elements, and SVG path morphing with performance optimization.",
+      "version": "1.0"
+    },
+    {
+      "name": "api-design-principles",
+      "short_description": "Design and review REST APIs with best practices for versioning, error handling, pagination, OpenAPI specifications, and API contract reviews.",
       "version": "1.0"
     },
     {
@@ -118,11 +128,6 @@
       "version": "1.0"
     },
     {
-      "name": "frontend-design",
-      "short_description": "Create distinctive, production-grade frontend interfaces with high design quality. Use this skill when the user asks to build web components, pages, artifacts, posters, or applications (examples inclu",
-      "version": "1.0"
-    },
-    {
       "name": "frontend-dev-guidelines",
       "short_description": "You are a senior frontend engineer operating under strict architectural and performance standards. Use when creating components or pages, adding new features, or fetching or mutating data.",
       "version": "1.0"
@@ -184,7 +189,12 @@
     },
     {
       "name": "groq-autofix",
-      "short_description": "Pipeline de auto-corrección de código usando modelos de LLM (Groq/Gemini). Analiza logs de errores complejos, fallos de compilación TypeScript o errores de runtime.",
+      "short_description": "Auto-fix code errors using LLM models (Groq/Gemini). Analyzes complex error logs, TypeScript compilation failures, or runtime errors. Use when the user says 'fix this error', 'autofix build errors', o",
+      "version": "1.0"
+    },
+    {
+      "name": "i18n-localization",
+      "short_description": "Add internationalization and localization support including string translation, locale-based routing, RTL language support, and pluralization handling.",
       "version": "1.0"
     },
     {
@@ -233,23 +243,8 @@
       "version": "1.0"
     },
     {
-      "name": "playwright-cli",
-      "short_description": "Automates browser interactions for web testing, form filling, screenshots, and data extraction. Use when the user needs to navigate websites, interact with web pages, fill forms, take screenshots, tes",
-      "version": "1.0"
-    },
-    {
-      "name": "playwright-explore-website",
-      "short_description": "Website exploration for testing using Playwright MCP",
-      "version": "1.0"
-    },
-    {
-      "name": "playwright-generate-test",
-      "short_description": "Generate a Playwright test based on a scenario using Playwright MCP",
-      "version": "1.0"
-    },
-    {
-      "name": "playwright-skill",
-      "short_description": "IMPORTANT - Path Resolution: This skill can be installed in different locations (plugin system, manual installation, global, or project-specific). Before executing any commands, determine the skill di",
+      "name": "playwright",
+      "short_description": "Unified Playwright browser automation skill. Use when the user needs to navigate websites, interact with pages, fill forms, take screenshots, extract data, generate tests, explore web apps, or automat",
       "version": "1.0"
     },
     {
@@ -268,6 +263,16 @@
       "version": "1.0"
     },
     {
+      "name": "red-team-tactics",
+      "short_description": "Red team tactics including TTPs, kill chain stages, adversary emulation, MITRE ATT&CK mapping, and offensive security methodology.",
+      "version": "1.0"
+    },
+    {
+      "name": "red-team-tools",
+      "short_description": "Tool selection guidance for red team operations including recon, C2 frameworks, lateral movement, privilege escalation, and post-exploitation.",
+      "version": "1.0"
+    },
+    {
       "name": "refactor-plan",
       "short_description": "Plan a multi-file refactor with proper sequencing and rollback steps",
       "version": "1.0"
@@ -280,6 +285,11 @@
     {
       "name": "secrets-management",
       "short_description": "Secure secrets management practices for CI/CD pipelines using Vault, AWS Secrets Manager, and other tools.",
+      "version": "1.0"
+    },
+    {
+      "name": "security",
+      "short_description": "AWS cloud security including IAM policies, compliance scanning, secrets rotation, cloud security posture, and security audits.",
       "version": "1.0"
     },
     {
@@ -308,6 +318,11 @@
       "version": "1.0"
     },
     {
+      "name": "sql-optimization-patterns",
+      "short_description": "Optimize SQL queries, design database indexes, debug slow queries, fix N+1 problems, read execution plans, and improve overall database performance.",
+      "version": "1.0"
+    },
+    {
       "name": "stitch-ui-design",
       "short_description": "Expert guidance for crafting effective prompts in Google Stitch, the AI-powered UI design tool by Google Labs. This skill helps create precise, actionable prompts that generate high-quality UI designs",
       "version": "1.0"
@@ -333,18 +348,8 @@
       "version": "1.0"
     },
     {
-      "name": "typescript-advanced-types",
-      "short_description": "Master TypeScript's advanced type system including generics, conditional types, mapped types, template literals, and utility types for building type-safe applications. Use when implementing complex ty",
-      "version": "1.0"
-    },
-    {
       "name": "typescript-expert",
-      "short_description": "TypeScript and JavaScript expert with deep knowledge of type-level programming, performance optimization, monorepo management, migration strategies, and modern tooling.",
-      "version": "1.0"
-    },
-    {
-      "name": "typescript-pro",
-      "short_description": "Master TypeScript with advanced types, generics, and strict type safety. Handles complex type systems, decorators, and enterprise-grade patterns.",
+      "short_description": "TypeScript project architecture, performance optimization, monorepo management, migration strategies, and modern developer tooling. Use when setting up TypeScript config, migrating from JS to TS, opti",
       "version": "1.0"
     },
     {
@@ -360,11 +365,6 @@
     {
       "name": "typespec-create-api-plugin",
       "short_description": "Generate a TypeSpec API plugin with REST operations, authentication, and Adaptive Cards for Microsoft 365 Copilot",
-      "version": "1.0"
-    },
-    {
-      "name": "ui-ux-pro-max",
-      "short_description": "UI/UX design intelligence with searchable database",
       "version": "1.0"
     },
     {
@@ -394,7 +394,7 @@
     },
     {
       "name": "web-coder",
-      "short_description": "Expert 10x engineer with comprehensive knowledge of web development, internet protocols, and web standards. Use when working with HTML, CSS, JavaScript, web APIs, HTTP/HTTPS, web security, performance",
+      "short_description": "Web platform knowledge reference covering web standards, HTTP protocols, browser APIs, and cross-browser compatibility. Use when the user needs authoritative information about W3C/WHATWG specs, HTTP s",
       "version": "1.0"
     },
     {
