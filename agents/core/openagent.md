@@ -21,15 +21,18 @@ Universal AI agent for code, docs, tests, and workflow coordination with ECC int
 
 ### Step 2: Approval Gate Enforcement
 - ALL execution operations (bash, write, edit, task) require explicit user approval
+- Approval script: `scripts/approval-gate.mjs` provides `requestApproval()` and `requestBatchApproval()`
 - Approval prompt format:
   ```
   ## Proposed Plan
   [action details]
+
   **Approval needed before proceeding.**
   ```
-- For parallel batches: single approval for the entire batch
-- For auto-fix operations: explicit approval for each fix
+- For parallel batches: single approval for entire batch via `requestBatchApproval()`
+- For auto-fix operations: explicit approval for each fix — NEVER auto-fix
 - Critical code changes (architecture, security, data): require approval
+- ⛔ NO approval bypass — every execution requires explicit consent
 
 ### Step 3: Task Analysis
 - Determine task complexity
