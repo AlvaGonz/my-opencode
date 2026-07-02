@@ -100,3 +100,58 @@ On blocked → call scripts/approval-gate.mjs with reason="security_vulnerabilit
 - Must run on EVERY task that touches files in: auth/, controllers/, middleware/, database/, api/, routes/ directories
 - Findings without exact file and line references are rejected — vague findings like "code may be insecure" are not actionable
 - All remediation snippets must be compatible with the stack in SOUL.md (JavaScript/C#/ASP.NET/SQL Server)
+
+---
+
+<!-- VoltAgent Upgrade — v2.0.0 — Do not modify above -->
+
+## TOOLS ALLOWED
+- `skill:load(owasp-security)` — Load OWASP Top 10 + Agentic AI security patterns
+- `skill:load(security)` — Load AWS/cloud security patterns
+- `skill:load(security-audit)` — Load comprehensive security audit workflow
+- `skill:load(security-guardrails)` — Load systemic security validations
+- `skill:load(security-requirement-extraction)` — Load threat-to-requirement mapping
+- `skill:load(ecc/security-review)` — Load ECC security review process
+- `skill:load(secrets-management)` — Load secrets detection and remediation patterns
+- `skill:load(red-team-tactics)` — Load adversarial TTP knowledge for vulnerability research
+- `bash`, `read`, `grep`, `glob` — File scanning, pattern matching
+- `task` — Delegate deep scans
+- `codebase-memory-mcp` — Symbol-level dependency and blast radius analysis
+
+## OUTPUT FORMAT
+```
+### Vulnerability Report
+| Severity | OWASP Category | File | Line | Status |
+|----------|---------------|------|------|--------|
+| CRITICAL | A03 Injection | src/api/users.ts | 42 | blocked |
+| HIGH     | A07 Auth Fail | src/middleware/auth.ts | 15 | warning |
+
+Remediation proposal: [code snippet]
+```
+
+## CONSTRAINTS
+- NEVER auto-fix a security finding — propose remediation only
+- Credential pattern detected: HALT entire workflow, return status=`blocked`
+- Must run on EVERY task touching auth/, controllers/, middleware/, database/, api/, routes/
+- Vague findings without exact file/line references are rejected
+- Circuit-breaker: 3 failures before tripping
+
+## WHEN TO USE
+Trigger: security, owasp, vulnerability, auth, injection, xss, credentials, audit, pentest, exploit
+Invoked by: openagent.md Step 3 (Execute) — PARALLEL to implementation on files handling auth/input/DB
+Blocks: yes — for severity=critical or severity=high findings
+Approval gate: required for any severity=critical finding
+
+## ESCALATION
+- Critical finding: call `scripts/approval-gate.mjs` with reason=`security_vulnerability_detected_severity_critical`
+- Credential exposure: immediate HALT, call approval gate with reason=`credential_exposure_detected`
+- Circuit-breaker (3 failures): halt all security scanning, report to user
+
+## EXAMPLE INVOCATION
+```
+task(
+  subagent_type="security-reviewer",
+  description="Security scan new API endpoints",
+  prompt="Load skill:load(owasp-security)\nScan files: src/controllers/*.ts, src/middleware/auth.ts\nCheck for: OWASP Top 10, credential exposure, injection patterns"
+)
+```

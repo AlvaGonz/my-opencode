@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OpenCode Agent - Global Interconnections Graph</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%);
+            min-height:100vh;
+            overflow: hidden;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(15, 15, 35, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-bottom: 1px solid rgba(100, 200, 255, 0.2);
+        }
+
+        .header h1 {
+            color: #64c8ff;
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 2px;
+        }
+
+        .header .subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        #graph-container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .tooltip {
+            position: absolute;
+            padding: 12px 16px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.85rem;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s;
+            max-width: 300px;
+            z-index: 1000;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .tooltip h4 {
+            color: #64c8ff;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .tooltip p {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+
+        .legend {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(15, 15, 35, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(100, 200, 255, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            z-index: 1000;
+            max-width: 250px;
+        }
+
+        .legend h3 {
+            color: #64c8ff;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+        }
+
+        .control-btn {
+            background: rgba(15, 15, 35, 0.9);
+            border: 1px solid rgba(100, 200, 255, 0.3);
+            color: #64c8ff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .control-btn:hover {
+            background: rgba(100, 200, 255, 0.2);
+            border-color: #64c8ff;
+        }
+
+        .node-label {
+            font-size: 11px;
+            fill: rgba(255, 255, 255, 0.9);
+            pointer-events: none;
+            text-shadow: 0 0 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .link {
+            stroke-opacity: 0.6;
+            transition: stroke-width 0.3s;
+        }
+
+        .link:hover {
+            stroke-opacity: 1;
+        }
+
+        @keyframes pulse {
+            0%, 100% { r: 8; }
+            50% { r: 12; }
+        }
+
+        .node-core {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>OPENCODE AGENT</h1>
+        <div class="subtitle">Global Interconnections Graph - Interactive Visualization</div>
+    </div>
+
+    <div id="graph-container"></div>
+    <div class="tooltip" id="tooltip"></div>
+
+    <div class="legend">
+        <h3>Node Categories</h3>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ff6b6b;"></div>
+            <span>Core Files</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #4ecdc4;"></div>
+            <span>Agents</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #45b7d1;"></div>
+            <span>Subagents</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #96ceb4;"></div>
+            <span>MCP Servers</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #feca57;"></div>
+            <span>Skills</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #ff9ff3;"></div>
+            <span>Workflow Steps</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #54a0ff;"></div>
+            <span>Scripts & Hooks</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #5f27cd;"></div>
+            <span>Context & Standards</span>
+        </div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="resetZoom()">Reset View</button>
+        <button class="control-btn" onclick="toggleLabels()">Toggle Labels</button>
+        <button class="control-btn" onclick="focusOnCore()">Focus Core</button>
+    </div>
+
+    <script>
+        // Graph data
+        const data = {
+            nodes: [
+                // Core Files
+                { id: "AGENTS.md", group: "core", radius: 25, description: "Global Agent Constitution - Single source of truth for all AI-assisted development sessions" },
+                { id: "SOUL.md", group: "core", radius: 25, description: "Invariant Agent Identity - Technical identity and operational values that never change" },
+                { id: "opencode.json", group: "core", radius: 22, description: "Main configuration file - MCPs, subagents, skills declared" },
+                { id: "mcp.json", group: "core", radius: 18, description: "MCP server definitions with $env references" },
+                { id: ".env", group: "core", radius: 15, description: "Gitignored credentials storage" },
+
+                // Main Agent
+                { id: "OpenAgent", group: "agent", radius: 35, description: "Primary universal agent - orchestrates all tasks and delegates to specialists" },
+                { id: "OpenCoder", group: "agent", radius: 30, description: "Complex coding specialist - multi-file refactoring and execution" },
+
+                // Subagents
+                { id: "Planner", group: "subagent", radius: 20, description: "Feature planning & breakdown - task decomposition and milestone definition" },
+                { id: "Security Reviewer", group: "subagent", radius: 20, description: "OWASP Top 10 analysis, auth flow review, input validation" },
+                { id: "Code Reviewer", group: "subagent", radius: 20, description: "Code quality analysis, anti-pattern detection, readability" },
+                { id: "TDD Guide", group: "subagent", radius: 20, description: "Test-driven development - test case design and coverage analysis" },
+                { id: "Architect", group: "subagent", radius: 20, description: "ADR writing, C4 diagrams, pattern selection" },
+                { id: "Refactor Cleaner", group: "subagent", radius: 20, description: "Dead code removal, naming improvement, coupling reduction" },
+                { id: "Build Error Resolver", group: "subagent", radius: 20, description: "Stack trace analysis, root cause isolation, fix strategy" },
+
+                // Core Subagents
+                { id: "ContextScout", group: "subagent", radius: 18, description: "Discover internal context files before executing" },
+                { id: "ExternalScout", group: "subagent", radius: 18, description: "Fetch current documentation for external packages" },
+                { id: "TaskManager", group: "subagent", radius: 18, description: "Break down complex features into subtasks" },
+                { id: "DocWriter", group: "subagent", radius: 18, description: "Generate comprehensive documentation" },
+
+                // MCP Servers
+                { id: "MSSQL", group: "mcp", radius: 18, description: "SQL Server queries and database operations" },
+                { id: "GitHub MCP", group: "mcp", radius: 18, description: "GitHub operations - PRs, issues, commits" },
+                { id: "Context7", group: "mcp", radius: 18, description: "Library docs lookup and external documentation" },
+                { id: "StitchMCP", group: "mcp", radius: 18, description: "Google Stitch UI/design tasks" },
+                { id: "MongoDB", group: "mcp", radius: 15, description: "MongoDB queries (disabled)" },
+                { id: "Awesome Copilot", group: "mcp", radius: 15, description: "Autocomplete and code suggestion (disabled)" },
+                { id: "Sequential Thinking", group: "mcp", radius: 15, description: "Sequential thinking tools (disabled)" },
+
+                // Skills (sample of key ones)
+                { id: "OWASP Security", group: "skill", radius: 16, description: "Security audits and vulnerability reviews" },
+                { id: "TDD", group: "skill", radius: 16, description: "Test-driven development workflow" },
+                { id: "Code Review", group: "skill", radius: 16, description: "Code quality review practices" },
+                { id: "Architecture", group: "skill", radius: 16, description: "Architecture decision-making framework" },
+                { id: "Git Workflows", group: "skill", radius: 16, description: "Advanced Git techniques and PR workflows" },
+                { id: "SQL Optimization", group: "skill", radius: 16, description: "Query optimization and database performance" },
+                { id: "Frontend Design", group: "skill", radius: 16, description: "Production-grade frontend interfaces" },
+                { id: "Backend Dev", group: "skill", radius: 16, description: "Backend development guidelines" },
+                { id: "MCP Builder", group: "skill", radius: 16, description: "Building MCP servers" },
+                { id: "Task Management", group: "skill", radius: 16, description: "Task breakdown and management CLI" },
+
+                // Workflow Steps
+                { id: "Step 1: Context", group: "workflow", radius: 18, description: "Load required context files before execution" },
+                { id: "Step 2: Approve", group: "workflow", radius: 18, description: "Request approval before any execution" },
+                { id: "Step 3: Analyze", group: "workflow", radius: 18, description: "Determine task complexity and delegation criteria" },
+                { id: "Step 4: Execute", group: "workflow", radius: 18, description: "Direct execution or delegate to subagent" },
+                { id: "Step 5: Validate", group: "workflow", radius: 18, description: "Check quality against loaded standards" },
+                { id: "Step 6: Summarize", group: "workflow", radius: 18, description: "Report accomplishments and next steps" },
+
+                // Scripts & Hooks
+                { id: "session-start", group: "script", radius: 14, description: "Session initialization - validate-env, session-init, load profile" },
+                { id: "session-stop", group: "script", radius: 14, description: "Session cleanup - persist state, update WORKING-CONTEXT" },
+                { id: "validate-env", group: "script", radius: 14, description: "Pre-flight credential check" },
+                { id: "registry", group: "script", radius: 14, description: "Build skills-lock and agents-lock" },
+                { id: "activate-profile", group: "script", radius: 14, description: "Project profile switcher" },
+                { id: "approval-gate", group: "script", radius: 14, description: "Blocks execution until human approves" },
+                { id: "circuit-breaker", group: "script", radius: 14, description: "Stops agent on repeated failure" },
+                { id: "post_task_loop", group: "script", radius: 14, description: "Post-execution verifier" },
+
+                // Context & Standards
+                { id: "code-quality", group: "context", radius: 16, description: "Code standards and quality guidelines" },
+                { id: "test-coverage", group: "context", radius: 16, description: "Testing standards and coverage requirements" },
+                { id: "documentation", group: "context", radius: 16, description: "Documentation standards and guidelines" },
+                { id: "owasp-security", group: "context", radius: 16, description: "OWASP security standards" },
+                { id: "error-handling", group: "context", radius: 16, description: "Error handling standards" },
+                { id: "architecture-adr", group: "context", radius: 16, description: "Architecture decision records standards" },
+                { id: "task-delegation", group: "context", radius: 16, description: "Task delegation workflow basics" },
+                { id: "WORKING-CONTEXT", group: "context", radius: 18, description: "Living state - updated every session" },
+
+                // External Tools
+                { id: "GitHub API", group: "external", radius: 16, description: "GitHub REST API for operations" },
+                { id: "SQL Server", group: "external", radius: 16, description: "Microsoft SQL Server database" },
+                { id: "Groq API", group: "external", radius: 16, description: "Groq AI provider API" },
+                { id: "Context7 API", group: "external", radius: 16, description: "Context7 documentation API" },
+                { id: "Google Stitch", group: "external", radius: 16, description: "Google Stitch design platform" },
+            ],
+            links: [
+                // Core file connections
+                { source: "AGENTS.md", target: "OpenAgent", value: 3, type: "defines" },
+                { source: "SOUL.md", target: "OpenAgent", value: 3, type: "defines" },
+                { source: "opencode.json", target: "OpenAgent", value: 3, type: "configures" },
+                { source: "opencode.json", target: "OpenCoder", value: 2, type: "configures" },
+                { source: "mcp.json", target: "opencode.json", value: 2, type: "referenced by" },
+                { source: ".env", target: "mcp.json", value: 2, type: "provides credentials" },
+
+                // Agent to subagent delegation
+                { source: "OpenAgent", target: "Planner", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "Security Reviewer", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "Code Reviewer", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "TDD Guide", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "Architect", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "Refactor Cleaner", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "Build Error Resolver", value: 2, type: "delegates" },
+                { source: "OpenAgent", target: "OpenCoder", value: 3, type: "delegates complex tasks" },
+
+                // OpenCoder to core subagents
+                { source: "OpenCoder", target: "ContextScout", value: 2, type: "uses" },
+                { source: "OpenCoder", target: "ExternalScout", value: 2, type: "uses" },
+                { source: "OpenCoder", target: "TaskManager", value: 2, type: "uses" },
+                { source: "OpenCoder", target: "DocWriter", value: 2, type: "uses" },
+
+                // MCP connections
+                { source: "OpenAgent", target: "MSSQL", value: 1, type: "queries" },
+                { source: "OpenAgent", target: "GitHub MCP", value: 1, type: "operates" },
+                { source: "OpenAgent", target: "Context7", value: 1, type: "looks up" },
+                { source: "OpenAgent", target: "StitchMCP", value: 1, type: "designs" },
+                { source: "opencode.json", target: "MSSQL", value: 2, type: "configures" },
+                { source: "opencode.json", target: "GitHub MCP", value: 2, type: "configures" },
+                { source: "opencode.json", target: "Context7", value: 2, type: "configures" },
+                { source: "opencode.json", target: "StitchMCP", value: 2, type: "configures" },
+
+                // External tool connections
+                { source: "MSSQL", target: "SQL Server", value: 2, type: "connects to" },
+                { source: "GitHub MCP", target: "GitHub API", value: 2, type: "uses" },
+                { source: "Context7", target: "Context7 API", value: 2, type: "fetches from" },
+                { source: "StitchMCP", target: "Google Stitch", value: 2, type: "designs with" },
+                { source: "opencode.json", target: "Groq API", value: 2, type: "uses" },
+
+                // Workflow steps
+                { source: "Step 1: Context", target: "Step 2: Approve", value: 3, type: "leads to" },
+                { source: "Step 2: Approve", target: "Step 3: Analyze", value: 3, type: "leads to" },
+                { source: "Step 3: Analyze", target: "Step 4: Execute", value: 3, type: "leads to" },
+                { source: "Step 4: Execute", target: "Step 5: Validate", value: 3, type: "leads to" },
+                { source: "Step 5: Validate", target: "Step 6: Summarize", value: 3, type: "leads to" },
+                { source: "OpenAgent", target: "Step 1: Context", value: 2, type: "follows" },
+
+                // Context connections
+                { source: "Step 1: Context", target: "code-quality", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "test-coverage", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "documentation", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "owasp-security", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "error-handling", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "architecture-adr", value: 2, type: "loads" },
+                { source: "Step 1: Context", target: "task-delegation", value: 2, type: "loads" },
+
+                // Skill connections
+                { source: "Security Reviewer", target: "OWASP Security", value: 2, type: "uses" },
+                { source: "TDD Guide", target: "TDD", value: 2, type: "uses" },
+                { source: "Code Reviewer", target: "Code Review", value: 2, type: "uses" },
+                { source: "Architect", target: "Architecture", value: 2, type: "uses" },
+                { source: "OpenAgent", target: "Git Workflows", value: 1, type: "uses" },
+                { source: "OpenAgent", target: "SQL Optimization", value: 1, type: "uses" },
+                { source: "OpenCoder", target: "Frontend Design", value: 1, type: "uses" },
+                { source: "OpenCoder", target: "Backend Dev", value: 1, type: "uses" },
+                { source: "OpenCoder", target: "MCP Builder", value: 1, type: "uses" },
+                { source: "TaskManager", target: "Task Management", value: 2, type: "uses" },
+
+                // Script connections
+                { source: "session-start", target: "validate-env", value: 2, type: "calls" },
+                { source: "session-start", target: "registry", value: 2, type: "calls" },
+                { source: "session-start", target: "OpenAgent", value: 1, type: "initializes" },
+                { source: "session-stop", target: "WORKING-CONTEXT", value: 2, type: "updates" },
+                { source: "approval-gate", target: "Step 2: Approve", value: 2, type: "enforces" },
+                { source: "circuit-breaker", target: "Step 5: Validate", value: 1, type: "protects" },
+                { source: "post_task_loop", target: "Step 5: Validate", value: 2, type: "verifies" },
+
+                // Working context
+                { source: "WORKING-CONTEXT", target: "OpenAgent", value: 1, type: "informs" },
+                { source: "activate-profile", target: "WORKING-CONTEXT", value: 2, type: "modifies" },
+            ]
+        };
+
+        // Color scheme
+        const colors = {
+            core: "#ff6b6b",
+            agent: "#4ecdc4",
+            subagent: "#45b7d1",
+            mcp: "#96ceb4",
+            skill: "#feca57",
+            workflow: "#ff9ff3",
+            script: "#54a0ff",
+            context: "#5f27cd",
+            external: "#a8e6cf"
+        };
+
+        // Setup SVG
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        const svg = d3.select("#graph-container")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("viewBox", [0, 0, width, height]);
+
+        // Add zoom behavior
+        const g = svg.append("g");
+
+        const zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on("zoom", (event) => {
+                g.attr("transform", event.transform);
+            });
+
+        svg.call(zoom);
+
+        // Create force simulation
+        const simulation = d3.forceSimulation(data.nodes)
+            .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
+            .force("charge", d3.forceManyBody().strength(-400))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(d => d.radius + 10));
+
+        // Create links
+        const link = g.append("g")
+            .selectAll("line")
+            .data(data.links)
+            .join("line")
+            .attr("class", "link")
+            .attr("stroke", "#64c8ff")
+            .attr("stroke-width", d => Math.sqrt(d.value))
+            .attr("stroke-opacity", 0.4);
+
+        // Create nodes
+        const node = g.append("g")
+            .selectAll("circle")
+            .data(data.nodes)
+            .join("circle")
+            .attr("class", d => `node-${d.group}`)
+            .attr("r", d => d.radius)
+            .attr("fill", d => colors[d.group])
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 2)
+            .style("cursor", "pointer")
+            .call(d3.drag()
+                .on("start", dragstarted)
+                .on("drag", dragged)
+                .on("end", dragended));
+
+        // Add labels
+        const labels = g.append("g")
+            .selectAll("text")
+            .data(data.nodes)
+            .join("text")
+            .attr("class", "node-label")
+            .attr("text-anchor", "middle")
+            .attr("dy", d => d.radius + 15)
+            .text(d => d.id)
+            .style("opacity", 0.9);
+
+        // Tooltip
+        const tooltip = d3.select("#tooltip");
+
+        node.on("mouseover", (event, d) => {
+            tooltip.style("opacity", 1)
+                .html(`<h4>${d.id}</h4><p>${d.description}</p>`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+
+            // Highlight connected links
+            link.style("stroke-opacity", l => 
+                (l.source.id === d.id || l.target.id === d.id) ? 1 : 0.1
+            );
+            link.style("stroke-width", l => 
+                (l.source.id === d.id || l.target.id === d.id) ? 3 : 1
+            );
+        })
+        .on("mousemove", (event) => {
+            tooltip.style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 10) + "px");
+        })
+        .on("mouseout", () => {
+            tooltip.style("opacity", 0);
+            link.style("stroke-opacity", 0.4)
+                .style("stroke-width", d => Math.sqrt(d.value));
+        });
+
+        // Simulation tick
+        simulation.on("tick", () => {
+            link
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", d => d.target.x)
+                .attr("y2", d => d.target.y);
+
+            node
+                .attr("cx", d => d.x)
+                .attr("cy", d => d.y);
+
+            labels
+                .attr("x", d => d.x)
+                .attr("y", d => d.y);
+        });
+
+        // Drag functions
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+        }
+
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+        }
+
+        // Control functions
+        let labelsVisible = true;
+        function toggleLabels() {
+            labelsVisible = !labelsVisible;
+            labels.style("opacity", labelsVisible ? 0.9 : 0);
+        }
+
+        function resetZoom() {
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity
+            );
+        }
+
+        function focusOnCore() {
+            const coreNodes = data.nodes.filter(n => n.group === "core" || n.group === "agent");
+            const centerX = d3.mean(coreNodes, d => d.x);
+            const centerY = d3.mean(coreNodes, d => d.y);
+            
+            svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity.translate(width/2 - centerX, height/2 - centerY).scale(1.2)
+            );
+        }
+
+        // Add glow effect to core nodes
+        const defs = svg.append("defs");
+        const filter = defs.append("filter")
+            .attr("id", "glow");
+        
+        filter.append("feGaussianBlur")
+            .attr("stdDeviation", "3")
+            .attr("result", "coloredBlur");
+        
+        const feMerge = filter.append("feMerge");
+        feMerge.append("feMergeNode").attr("in", "coloredBlur");
+        feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
+        node.filter(d => d.group === "core" || d.group === "agent")
+            .style("filter", "url(#glow)");
+
+        // Window resize handler
+        window.addEventListener("resize", () => {
+            const newWidth = window.innerWidth;
+            const newHeight = window.innerHeight;
+            svg.attr("width", newWidth).attr("height", newHeight);
+            simulation.force("center", d3.forceCenter(newWidth / 2, newHeight / 2));
+            simulation.alpha(0.3).restart();
+        });
+    </script>
+</body>
+</html>

@@ -7,7 +7,8 @@
       "npm": "@ai-sdk/openai-compatible",
       "name": "Groq",
       "options": {
-        "baseURL": "https://api.groq.com/openai/v1"
+        "baseURL": "https://api.groq.com/openai/v1",
+        "apiKey": "{env:GROQ_API_KEY}"
       },
       "models": {
         "meta-llama/llama-4-scout-17b-16e-instruct": {
@@ -22,9 +23,13 @@
     ".opencode/WORKING-CONTEXT.md"
   ],
   "permission": {
-    "bash": "allow",
+    "bash": {
+    "*": "allow"},
     "edit": "allow",
-    "write": "allow"
+    "write": "allow",
+    "read": "allow",
+    "delete": "allow"
+
   },
   "mcp": {
     "context7": {

@@ -140,3 +140,69 @@ On blocked → call scripts/approval-gate.mjs with reason="planner_blocked_ambig
 - Each work unit MUST have at least one acceptance_criteria — units without criteria are rejected
 - Maximum 20 work units per breakdown — if more are needed, split into phases and present Phase 1 only
 - Work units must reference concrete file paths, not abstract module names
+
+---
+
+<!-- VoltAgent Upgrade — v2.0.0 — Do not modify above -->
+
+## TOOLS ALLOWED
+- `skill:load(planning-with-files)` — Load file-based planning for task tracking (task_plan.md, findings.md, progress.md)
+- `skill:load(task-management)` — Load CLI task management for subtask tracking with status and dependencies
+- `skill:load(antigravity-skill-orchestrator)` — Load meta-skill for optimal skill selection during planning
+- `skill:load(opencode-skill-orchestrator)` — Load alternative skill orchestration patterns
+- `bash` — Run task-cli.ts for task status management
+- `read`, `write`, `edit` — Create task_plan.md and subtask files
+- `task` — Delegate to architect.md for ADR, tdd-guide.md for test planning
+- `codebase-memory-mcp` — Query codebase structure for accurate file path references in work units
+
+## OUTPUT FORMAT
+```
+## Implementation Plan: [Feature Name]
+### Overview
+[2-3 sentence summary]
+### Implementation Steps
+#### Phase 1: [Phase Name]
+1. **[Step Name]** (File: path/to/file)
+   - Action: Specific action
+   - Dependencies: None / Requires step X
+   - Risk: Low/Medium/High
+
+### Work Units
+[
+  { "id": "WU-001", "title": "...", "files": [...], "acceptance_criteria": "...", "risk": "low", "depends_on": [] }
+]
+
+### Dependency Diagram
+```mermaid
+flowchart LR
+  WU-001 --> WU-002
+```
+```
+
+## CONSTRAINTS
+- Never produce a breakdown with steps that cannot be individually verified in isolation
+- If task cannot be decomposed: STOP, ask for clarification — do not guess
+- Each work unit MUST have at least one acceptance_criteria
+- Maximum 20 work units per breakdown — split into phases if more needed
+- Work units must reference concrete file paths, not abstract module names
+- High-risk units trigger approval gate
+
+## WHEN TO USE
+Trigger: plan, breakdown, feature, roadmap, tasks, milestones, sprint, epic
+Invoked by: openagent.md Step 1 (Context Assessment) when task type is "feature" or "multi-step"
+Blocks: yes — openagent does not proceed until planner returns breakdown
+Approval gate: yes — required for any breakdown involving 3+ files or schema changes
+
+## ESCALATION
+- High-risk work unit (risk=high): call `scripts/approval-gate.mjs` with reason=`high_risk_work_unit`
+- Ambiguous requirements that cannot be decomposed: return status=`blocked` with reason=`planner_blocked_ambiguous_requirements`
+- Circuit-breaker: 3 failures before tripping
+
+## EXAMPLE INVOCATION
+```
+task(
+  subagent_type="planner",
+  description="Plan document validation feature implementation",
+  prompt="Load skill:load(planning-with-files)\nFeature: async document validation with OCR\nFiles: src/backend/Application/Handlers/, src/backend/Infrastructure/Ocr/\nBreak into work units with dependencies, risk assessment, and acceptance criteria"
+)
+```

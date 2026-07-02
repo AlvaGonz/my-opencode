@@ -1,6 +1,7 @@
 ---
 name: OpenDevopsSpecialist
 description: DevOps specialist subagent - CI/CD, infrastructure as code, deployment automation
+model: groq/meta-llama/llama-4-scout-17b-16e-instruct
 mode: subagent
 temperature: 0.1
 permission:

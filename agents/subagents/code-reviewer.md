@@ -122,3 +122,57 @@ On blocked → call scripts/approval-gate.mjs with reason="code_quality_below_th
 - Confidence-based filtering: only report issues where confidence > 80% that it is a real problem
 - Do not flag issues in unchanged code unless they are severity=critical security issues
 - Consolidate similar violations (e.g., 10 instances of "unused import" become 1 finding with count=10)
+
+---
+
+<!-- VoltAgent Upgrade — v2.0.0 — Do not modify above -->
+
+## TOOLS ALLOWED
+- `skill:load(code-review)` — Load code review skill for structured reviews
+- `skill:load(code-refactoring-refactor-clean)` — Load refactoring patterns for remediation proposals
+- `skill:load(code-refactoring-tech-debt)` — Load tech debt assessment patterns
+- `skill:load(ecc/coding-standards)` — Load ECC coding standards and conventions
+- `skill:load(quality-qa)` — Load QA quality enforcement matrix
+- `bash` — Run git diff, test suites
+- `read`, `glob`, `grep` — File inspection and pattern search
+- `task` — Delegate to refactor-cleaner.md for remediation
+- `codebase-memory-mcp` — Semantic graph queries for import/call-chain analysis
+
+## OUTPUT FORMAT
+```
+## Review Summary
+| Severity | Count | Status |
+|----------|-------|--------|
+| CRITICAL | 0     | pass   |
+| HIGH     | 2     | warn   |
+
+Verdict: WARNING — 2 HIGH issues should be resolved before merge.
+```
+
+## CONSTRAINTS
+- NEVER rewrite code — only report violations and scores
+- Score threshold 70 is minimum gate, aim for 85+
+- Confidence-based filtering: report only >80% confident issues
+- Consolidate similar violations with count
+- Do not flag unchanged code unless severity=critical security
+- Circuit-breaker: 3 failures before tripping
+
+## WHEN TO USE
+Trigger: review, quality, best practices, code smell, readability, naming, dead code, complexity
+Invoked by: openagent.md Step 4 (Validate) — every file modified during Execute
+Blocks: yes — for severity=high anti-patterns
+Approval gate: no — unless refactor scope >3 files
+
+## ESCALATION
+- If aggregate score < 70 AND refactor scope > 3 files: call `scripts/approval-gate.mjs` with reason=`code_quality_below_threshold_multiple_files`
+- If score < 70: delegate to refactor-cleaner.md with violations list
+- If circuit-breaker trips (3 failures): halt and report to user
+
+## EXAMPLE INVOCATION
+```
+task(
+  subagent_type="code-reviewer",
+  description="Review modified auth module files",
+  prompt="Load skill:load(code-review)\nReview files: src/auth/*.ts\nCheck for: naming conventions, cyclomatic complexity >10, dead code, SRP violations"
+)
+```

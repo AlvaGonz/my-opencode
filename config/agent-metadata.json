@@ -344,6 +344,67 @@
       "author": "opencode",
       "tags": ["testing", "evaluation"],
       "dependencies": []
+    },
+    "penetration-tester": {
+      "id": "penetration-tester",
+      "name": "Penetration Tester",
+      "category": "subagents/code",
+      "type": "subagent",
+      "version": "2.0.0",
+      "author": "opencode",
+      "tags": ["security", "pentest", "owasp", "vulnerability", "static-analysis"],
+      "dependencies": [
+        "context:owasp-security",
+        "skill:owasp-security",
+        "skill:security-audit",
+        "skill:red-team-tactics"
+      ]
+    },
+    "performance-engineer": {
+      "id": "performance-engineer",
+      "name": "Performance Engineer",
+      "category": "subagents/code",
+      "type": "subagent",
+      "version": "2.0.0",
+      "author": "opencode",
+      "tags": ["performance", "optimization", "benchmark", "sql", "profiling"],
+      "dependencies": [
+        "skill:sql-optimization-patterns",
+        "skill:react-best-practices",
+        "skill:backend-dev-guidelines",
+        "skill:frontend-dev-guidelines"
+      ]
+    },
+    "ley172-13-auditor": {
+      "id": "ley172-13-auditor",
+      "name": "Ley 172-13 Auditor",
+      "category": "subagents/code",
+      "type": "subagent",
+      "version": "2.0.0",
+      "author": "opencode",
+      "tags": ["compliance", "ley172-13", "ley126-02", "data-protection", "dr-law"],
+      "dependencies": [
+        "skill:security-guardrails",
+        "skill:secrets-management",
+        "skill:planning-with-files"
+      ]
+    },
+    "architect-reviewer": {
+      "id": "architect-reviewer",
+      "name": "Architect Reviewer",
+      "category": "subagents/code",
+      "type": "subagent",
+      "version": "2.0.0",
+      "author": "opencode",
+      "tags": ["architecture", "review", "adr", "c4", "quality"],
+      "dependencies": [
+        "context:architecture-decision-records",
+        "skill:architecture",
+        "skill:architecture-patterns",
+        "skill:architecture-decision-records",
+        "skill:api-design-principles",
+        "skill:clean-architecture"
+      ]
     }
   },
   "defaults": {

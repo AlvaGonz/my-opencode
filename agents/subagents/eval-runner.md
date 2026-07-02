@@ -1,8 +1,9 @@
 ---
 # OpenCode Agent Configuration
 id: eval-runner
-name: Eval Runner
+name: eval-runner
 description: "Test harness for evaluation framework - DO NOT USE DIRECTLY"
+model: groq/meta-llama/llama-4-scout-17b-16e-instruct
 category: testing
 type: utility
 version: 1.0.0
