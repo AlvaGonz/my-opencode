@@ -1,59 +1,211 @@
 ---
 name: red-team-tactics
-description: Red team tactics including TTPs, kill chain stages, adversary emulation, MITRE ATT&CK mapping, and offensive security methodology.
-trigger: "when the user asks about red team TTPs, kill chain stages, adversary emulation, MITRE ATT&CK mapping, or offensive security methodology"
-scope: offensive-security
-version: "1.0"
-sources:
-  - https://github.com/mantvydasb/RedTeam-Tactics-and-Techniques
-  - https://github.com/redcanaryco/atomic-red-team
-  - https://github.com/yeyintminthuhtut/Awesome-Red-Teaming
+description: "Red team tactics principles based on MITRE ATT&CK. Attack phases, detection evasion, reporting."
+risk: offensive
+source: community
+date_added: "2026-02-27"
 ---
 
-# Red Team Tactics Skill
+> AUTHORIZED USE ONLY: Use this skill only for authorized security assessments, defensive validation, or controlled educational environments.
 
-## Purpose
+# Red Team Tactics
 
-This skill provides authoritative reference material for red team operations, adversary emulation, and offensive security methodology. It maps real-world techniques to the MITRE ATT&CK framework and documents the full kill chain from reconnaissance to exfiltration.
+> Adversary simulation principles based on MITRE ATT&CK framework.
 
-Use this skill when you need to:
+---
 
-- Identify relevant TTPs for a given adversarial objective
-- Map offensive techniques to MITRE ATT&CK IDs
-- Plan adversary emulation scenarios
-- Build detection test cases based on Atomic Red Team tests
-- Reference kill chain stages with real technique examples
+## 1. MITRE ATT&CK Phases
 
-## How to Use
+### Attack Lifecycle
 
-1. **Kill chain mapping** — Open `references/kill-chain-stages.md` to understand each stage (Recon → Weaponization → Delivery → Exploitation → Installation → C2 → Actions on Objectives) with definitions, common tools, detection indicators, and examples from [ired.team](https://ired.team).
+```
+RECONNAISSANCE → INITIAL ACCESS → EXECUTION → PERSISTENCE
+       ↓              ↓              ↓            ↓
+   PRIVILEGE ESC → DEFENSE EVASION → CRED ACCESS → DISCOVERY
+       ↓              ↓              ↓            ↓
+LATERAL MOVEMENT → COLLECTION → C2 → EXFILTRATION → IMPACT
+```
 
-2. **TTP lookup** — Open `references/ttp-catalog.md` for a curated list of the top 30 most commonly used TTPs cross-referenced against both Atomic Red Team and RedTeam-Tactics repos. Each entry includes TTP ID, name, phase, atomic test command, and detection evasion notes.
+### Phase Objectives
 
-3. **MITRE ATT&CK matrix** — Open `references/mitre-attack-matrix.md` for the full tactic-to-technique mapping table derived from the Atomic Red Team matrix, showing which techniques have atomic tests available.
+| Phase | Objective |
+|-------|-----------|
+| **Recon** | Map attack surface |
+| **Initial Access** | Get first foothold |
+| **Execution** | Run code on target |
+| **Persistence** | Survive reboots |
+| **Privilege Escalation** | Get admin/root |
+| **Defense Evasion** | Avoid detection |
+| **Credential Access** | Harvest credentials |
+| **Discovery** | Map internal network |
+| **Lateral Movement** | Spread to other systems |
+| **Collection** | Gather target data |
+| **C2** | Maintain command channel |
+| **Exfiltration** | Extract data |
 
-4. **Engagement reporting** — Open `assets/engagement-report-template.md` to generate structured red team assessment reports with executive summary, scope, findings by severity, TTP-to-MITRE mapping, and remediation tables.
+---
 
-## What Each Reference File Contains
+## 2. Reconnaissance Principles
 
-| File | Source | Content |
-|------|--------|---------|
-| `references/mitre-attack-matrix.md` | atomic-red-team | Tactic → Technique ID → Technique Name → Atomic Test available |
-| `references/kill-chain-stages.md` | ired.team / RedTeam-Tactics | Kill chain breakdown by stage with tools, indicators, examples |
-| `references/ttp-catalog.md` | Both repos | Top 30 TTPs cross-referenced with atomic commands and evasion notes |
-| `assets/engagement-report-template.md` | Template | Blank engagement report with findings table and remediation matrix |
+### Passive vs Active
 
-## Gotchas
+| Type | Trade-off |
+|------|-----------|
+| **Passive** | No target contact, limited info |
+| **Active** | Direct contact, more detection risk |
 
-- **Atomic tests are live** — The atomic-red-team repo receives frequent updates. Always check the [upstream matrix](https://github.com/redcanaryco/atomic-red-team/blob/master/atomics/Indexes/Matrices/matrix.md) for the latest TTP coverage.
-- **TTP IDs change** — MITRE ATT&CK versions occasionally renumber techniques. Cross-reference with [attack.mitre.org](https://attack.mitre.org) for the current IDs.
-- **ired.team focuses on Windows** — The RedTeam-Tactics repo is heavily Windows/Active Directory focused. For Linux or cloud TTPs, supplement with platform-specific references.
-- **Detection indicators are not exhaustive** — Indicators listed are common artifacts; real-world ops may produce different telemetry depending on environment configuration.
-- **Use in controlled environments only** — The techniques documented here are for authorized testing. Unauthorized use is illegal.
+### Information Targets
 
-## Sources
+| Category | Value |
+|----------|-------|
+| Technology stack | Attack vector selection |
+| Employee info | Social engineering |
+| Network ranges | Scanning scope |
+| Third parties | Supply chain attack |
 
-- [Atomic Red Team — redcanaryco/atomic-red-team](https://github.com/redcanaryco/atomic-red-team)
-- [RedTeam Tactics and Techniques — mantvydasb/RedTeam-Tactics-and-Techniques](https://github.com/mantvydasb/RedTeam-Tactics-and-Techniques) (ired.team)
-- [Awesome Red Teaming — yeyintminthuhtut/Awesome-Red-Teaming](https://github.com/yeyintminthuhtut/Awesome-Red-Teaming)
-- [MITRE ATT&CK](https://attack.mitre.org)
+---
+
+## 3. Initial Access Vectors
+
+### Selection Criteria
+
+| Vector | When to Use |
+|--------|-------------|
+| **Phishing** | Human target, email access |
+| **Public exploits** | Vulnerable services exposed |
+| **Valid credentials** | Leaked or cracked |
+| **Supply chain** | Third-party access |
+
+---
+
+## 4. Privilege Escalation Principles
+
+### Windows Targets
+
+| Check | Opportunity |
+|-------|-------------|
+| Unquoted service paths | Write to path |
+| Weak service permissions | Modify service |
+| Token privileges | Abuse SeDebug, etc. |
+| Stored credentials | Harvest |
+
+### Linux Targets
+
+| Check | Opportunity |
+|-------|-------------|
+| SUID binaries | Execute as owner |
+| Sudo misconfiguration | Command execution |
+| Kernel vulnerabilities | Kernel exploits |
+| Cron jobs | Writable scripts |
+
+---
+
+## 5. Defense Evasion Principles
+
+### Key Techniques
+
+| Technique | Purpose |
+|-----------|---------|
+| LOLBins | Use legitimate tools |
+| Obfuscation | Hide malicious code |
+| Timestomping | Hide file modifications |
+| Log clearing | Remove evidence |
+
+### Operational Security
+
+- Work during business hours
+- Mimic legitimate traffic patterns
+- Use encrypted channels
+- Blend with normal behavior
+
+---
+
+## 6. Lateral Movement Principles
+
+### Credential Types
+
+| Type | Use |
+|------|-----|
+| Password | Standard auth |
+| Hash | Pass-the-hash |
+| Ticket | Pass-the-ticket |
+| Certificate | Certificate auth |
+
+### Movement Paths
+
+- Admin shares
+- Remote services (RDP, SSH, WinRM)
+- Exploitation of internal services
+
+---
+
+## 7. Active Directory Attacks
+
+### Attack Categories
+
+| Attack | Target |
+|--------|--------|
+| Kerberoasting | Service account passwords |
+| AS-REP Roasting | Accounts without pre-auth |
+| DCSync | Domain credentials |
+| Golden Ticket | Persistent domain access |
+
+---
+
+## 8. Reporting Principles
+
+### Attack Narrative
+
+Document the full attack chain:
+1. How initial access was gained
+2. What techniques were used
+3. What objectives were achieved
+4. Where detection failed
+
+### Detection Gaps
+
+For each successful technique:
+- What should have detected it?
+- Why didn't detection work?
+- How to improve detection
+
+---
+
+## 9. Ethical Boundaries
+
+### Always
+
+- Stay within scope
+- Minimize impact
+- Report immediately if real threat found
+- Document all actions
+
+### Never
+
+- Destroy production data
+- Cause denial of service (unless scoped)
+- Access beyond proof of concept
+- Retain sensitive data
+
+---
+
+## 10. Anti-Patterns
+
+| ❌ Don't | ✅ Do |
+|----------|-------|
+| Rush to exploitation | Follow methodology |
+| Cause damage | Minimize impact |
+| Skip reporting | Document everything |
+| Ignore scope | Stay within boundaries |
+
+---
+
+> **Remember:** Red team simulates attackers to improve defenses, not to cause harm.
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

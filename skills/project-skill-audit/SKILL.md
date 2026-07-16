@@ -15,7 +15,6 @@ Audit the project's real recurring workflows before recommending skills. Prefer 
 Recommend updates before new skills when an existing project skill is already close to the needed behavior.
 
 ## When to Use
-
 - When the user asks what skills a project needs or which existing skills should be updated.
 - When recommendations should be grounded in project history, memory files, and local conventions.
 
@@ -187,4 +186,9 @@ Return a compact audit with:
 
 ## Follow-up
 
-If the user asks to actually create or update one of the recommended skills, switch to [$skill-creator](/Users/dimillian/.codex/skills/.system/skill-creator/SKILL.md) and implement the chosen skill rather than continuing the audit.
+If the user asks to actually create or update one of the recommended skills, switch to `$skill-creator` and implement the chosen skill rather than continuing the audit.
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

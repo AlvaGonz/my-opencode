@@ -1,109 +1,164 @@
 ---
 name: i18n-localization
-description: Add internationalization and localization support including string translation, locale-based routing, RTL language support, and pluralization handling.
-trigger: "when the user asks to add internationalization, translate strings, set up locale routing, support RTL languages, or handle pluralization"
-scope: frontend-i18n
-version: "1.0"
-sources:
-  - https://github.com/i18next/i18next
-  - https://github.com/formatjs/formatjs
-  - https://github.com/lingui/js-lingui
+description: "Internationalization and localization patterns. Detecting hardcoded strings, managing translations, locale files, RTL support."
+risk: safe
+source: community
+date_added: "2026-02-27"
 ---
 
-# i18n-Localization Skill
+# i18n & Localization
 
-> Internationalization (i18n) is the design and development of products that enables easy localization for target audiences varying in culture, region, or language. This skill covers setup, string extraction, translation management, locale routing, pluralization, and RTL support.
+> Internationalization (i18n) and Localization (L10n) best practices.
 
 ---
 
-## Purpose
+## 1. Core Concepts
 
-Guide the implementation of frontend internationalization and localization using one of three major ecosystems:
-
-| Library | Stars | Bundle | Approach |
-|---------|-------|--------|----------|
-| **i18next** | 8.6k | ~6 KB | Runtime `t()` calls, JSON resource files, plugin-based |
-| **FormatJS (react-intl)** | 14.7k | ~various | ICU MessageFormat, declarative components, polyfills |
-| **LinguiJS** | 5.8k | ~2 KB core | Extracts strings via CLI, compiles to minimal runtime, ICU-based |
-
-### When To Use Which
-
-- **i18next**: You need a mature, framework-agnostic solution with backend loading, caching, and language detection.
-- **FormatJS / react-intl**: You want ICU MessageFormat, rich-text in messages, and deep React integration (RSC, SSR).
-- **Lingui**: You want a lightweight, extract-and-compile workflow with no runtime overhead from ICU parsing.
+| Term | Meaning |
+|------|---------|
+| **i18n** | Internationalization - making app translatable |
+| **L10n** | Localization - actual translations |
+| **Locale** | Language + Region (en-US, tr-TR) |
+| **RTL** | Right-to-left languages (Arabic, Hebrew) |
 
 ---
 
-## How To Use
+## 2. When to Use i18n
 
-### 1. Choose a strategy (config.json)
-
-Set the strategy in `config.json`. This determines which libraries to install and which patterns to follow.
-
-### 2. Analyze codebase for hardcoded strings
-
-Run `scripts/extract-strings.ts` to scan `.tsx`/`.ts` files for strings not wrapped in `t()` or `<Trans>`.
-
-### 3. Create translation catalogs
-
-Use the `assets/en.json` template as a starting point. Each locale gets its own catalog file.
-
-### 4. Set up locale routing
-
-Follow `references/locale-routing.md` for sub-path or domain routing strategies.
-
-### 5. Handle pluralization
-
-Refer to `references/pluralization-rules.md` for ICU MessageFormat plural, select, selectordinal syntax.
-
-### 6. Support RTL
-
-Refer to `references/rtl-layout-guide.md` for CSS logical properties and layout changes.
+| Project Type | i18n Needed? |
+|--------------|--------------|
+| Public web app | ✅ Yes |
+| SaaS product | ✅ Yes |
+| Internal tool | ⚠️ Maybe |
+| Single-region app | ⚠️ Consider future |
+| Personal project | ❌ Optional |
 
 ---
 
-## Reference Files
+## 3. Implementation Patterns
 
-| File | Contents |
-|------|----------|
-| `config.json` | Strategy config: framework, default locale, supported locales, RTL locales, namespaces |
-| `scripts/extract-strings.ts` | TypeScript script that detects hardcoded strings not wrapped in `t()` or `<Trans>` |
-| `assets/en.json` | Base English translation template with `common` (20 keys), `errors` (15 keys), `forms` (15 keys) namespaces |
-| `references/pluralization-rules.md` | ICU Message `plural`, `select`, `selectordinal` with CLDR category table, English/Spanish/Arabic/Russian examples |
-| `references/rtl-layout-guide.md` | CSS logical properties, `dir="rtl"`, flexbox/grid mirroring, icon flipping, testing RTL |
-| `references/locale-routing.md` | Sub-path vs domain routing, middleware, locale detection via cookie vs Accept-Language |
+### React (react-i18next)
 
----
+```tsx
+import { useTranslation } from 'react-i18next';
 
-## Gotchas
+function Welcome() {
+  const { t } = useTranslation();
+  return <h1>{t('welcome.title')}</h1>;
+}
+```
 
-1. **Plural keys are language-specific**: English needs `_one` / `_other`. Arabic needs `_zero` / `_one` / `_two` / `_few` / `_many` / `_other`. Do not hardcode plural suffixes — use CLDR plural rules (see `references/pluralization-rules.md`).
+### Next.js (next-intl)
 
-2. **Variable name `count` is required by i18next**: The default plural variable in i18next must be named `count`. If not provided, there is no fallback — the key returns undefined.
+```tsx
+import { useTranslations } from 'next-intl';
 
-3. **`one` ≠ `=1`**: In ICU MessageFormat, the `one` plural category means "singular" (matches 1, -1, 1.0, etc.). Use `=1` only when you literally mean the number 1. In some locales, `one` matches numbers ending in 1 (like 11, 21, 31 in Russian).
+export default function Page() {
+  const t = useTranslations('Home');
+  return <h1>{t('title')}</h1>;
+}
+```
 
-4. **`other` is required**: In both ICU `{plural}` and `{select}` formats, the `other` case is mandatory per ICU4J spec. Omitting it throws an error in FormatJS and Lingui.
+### Python (gettext)
 
-5. **Extract, then translate, never inline**: Workflow should be: extract strings → ship to translators → compile catalogs. Never write translated strings directly in code.
+```python
+from gettext import gettext as _
 
-6. **RTL is not just text-align**: Setting `dir="rtl"` on `<html>` is step one. You must audit all margin/padding/padding-inline/border logical properties — especially in flexbox and grid layouts. See `references/rtl-layout-guide.md`.
-
-7. **String extraction misses**: Regex-based scanning (like `scripts/extract-strings.ts`) cannot catch computed template literals or dynamic `t()` calls with variable keys. Use the framework's official extractor (Lingui CLI, i18next-parser, babel-plugin-formatjs) for production.
-
-8. **SSR hydration mismatches**: When using locale-based content on the server vs client, ensure the locale is consistent. Use cookies to persist the user's locale choice between server and client renders.
-
-9. **Namespace conflicts**: Keys across namespaces must not overlap unless intentional. Most libraries fall back to the `common` namespace if no namespace is specified.
-
-10. **ICU escaping**: The ASCII apostrophe `'` escapes syntax in ICU messages. Two consecutive apostrophes produce one literal apostrophe. Prefer curly apostrophe `'` (U+2019) in human-readable strings.
+print(_("Welcome to our app"))
+```
 
 ---
 
-## Sources
+## 4. File Structure
 
-- [i18next — learn once, translate everywhere](https://github.com/i18next/i18next)
-- [FormatJS — react-intl and ICU MessageFormat](https://github.com/formatjs/formatjs)
-- [LinguiJS — readable, automated, optimized i18n](https://github.com/lingui/js-lingui)
-- [ICU MessageFormat spec](https://unicode-org.github.io/icu/userguide/format_parse/messages)
-- [CLDR Language Plural Rules](https://www.unicode.org/cldr/charts/46/supplemental/language_plural_rules.html)
-- [Next.js Internationalization guide](https://nextjs.org/docs/app/guides/internationalization)
+```
+locales/
+├── en/
+│   ├── common.json
+│   ├── auth.json
+│   └── errors.json
+├── tr/
+│   ├── common.json
+│   ├── auth.json
+│   └── errors.json
+└── ar/          # RTL
+    └── ...
+```
+
+---
+
+## 5. Best Practices
+
+### DO ✅
+
+- Use translation keys, not raw text
+- Namespace translations by feature
+- Support pluralization
+- Handle date/number formats per locale
+- Plan for RTL from the start
+- Use ICU message format for complex strings
+
+### DON'T ❌
+
+- Hardcode strings in components
+- Concatenate translated strings
+- Assume text length (German is 30% longer)
+- Forget about RTL layout
+- Mix languages in same file
+
+---
+
+## 6. Common Issues
+
+| Issue | Solution |
+|-------|----------|
+| Missing translation | Fallback to default language |
+| Hardcoded strings | Use linter/checker script |
+| Date format | Use Intl.DateTimeFormat |
+| Number format | Use Intl.NumberFormat |
+| Pluralization | Use ICU message format |
+
+---
+
+## 7. RTL Support
+
+```css
+/* CSS Logical Properties */
+.container {
+  margin-inline-start: 1rem;  /* Not margin-left */
+  padding-inline-end: 1rem;   /* Not padding-right */
+}
+
+[dir="rtl"] .icon {
+  transform: scaleX(-1);
+}
+```
+
+---
+
+## 8. Checklist
+
+Before shipping:
+
+- [ ] All user-facing strings use translation keys
+- [ ] Locale files exist for all supported languages
+- [ ] Date/number formatting uses Intl API
+- [ ] RTL layout tested (if applicable)
+- [ ] Fallback language configured
+- [ ] No hardcoded strings in components
+
+---
+
+## Script
+
+| Script | Purpose | Command |
+|--------|---------|---------|
+| `scripts/i18n_checker.py` | Detect hardcoded strings & missing translations | `python scripts/i18n_checker.py <project_path>` |
+
+## When to Use
+This skill is applicable to execute the workflow or actions described in the overview.
+
+## Limitations
+- Use this skill only when the task clearly matches the scope described above.
+- Do not treat the output as a substitute for environment-specific validation, testing, or expert review.
+- Stop and ask for clarification if required inputs, permissions, safety boundaries, or success criteria are missing.

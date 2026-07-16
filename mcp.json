@@ -65,7 +65,7 @@
         "@modelcontextprotocol/server-sequential-thinking"
       ],
       "env": {},
-      "disabled": true,
+      "disabled": false,
       "autoApprove": []
     },
     "context7-mcp": {
