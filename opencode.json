@@ -3,6 +3,9 @@
   "default_agent": "openagent",
   "plugin": [
     "./plugins/ponytail.mjs",
+    "./plugins/ecc-architecture-decision-records.mjs",
+    "./plugins/ecc-tdd-workflow.mjs",
+    "./plugins/ecc-verification-loop.mjs",
     "superpowers@git+https://github.com/obra/superpowers.git",
     "opencode-pty, opencode-vibeguard",
     "./plugins/cbm-integration.ts"
