@@ -102,7 +102,65 @@ This is the global OpenCode agent configuration for Adrian Alvarez. It lives at 
 | awesome-copilot | disabled | None | Autocomplete / code suggestion |
 | sequential-thinking | disabled | None | Sequential thinking tools |
 
-## 7. PROJECT SWITCH PROTOCOL
+## 7. CODEBASE MEMORY MCP (CBM) — USAGE PROTOCOL
+
+**MCP Server:** `codebase-memory-mcp` (enabled in opencode.json)
+**Plugin:** `cbm-integration` (auto-loaded via opencode.json plugins array)
+
+### When to Use CBM (Mandatory)
+
+| Scenario | CBM Tool | Why |
+|---|---|---|
+| **Session start** | `index_repository` (auto via hook) | Fresh graph for new session |
+| **Finding code** | `search_graph` | Replaces grep/glob for definitions, routes, handlers |
+| **Impact analysis** | `trace_path` (inbound/outbound) | Callers, callees, data flow, blast radius |
+| **Reading source** | `get_code_snippet` | Exact function/class source after search_graph |
+| **Architecture overview** | `get_architecture` | High-level structure, clusters, dependencies |
+| **Cross-repo calls** | `index_repository` (cross-repo mode) | HTTP/async channel mapping across services |
+| **Post-commit** | `detect_changes` (auto via git hook) | Incremental graph update |
+| **ADR management** | `manage_adr` | Create/update Architecture Decision Records |
+
+### Priority Order (Always Prefer CBM Over)
+
+1. `search_graph` → grep/glob for code definitions
+2. `trace_path` → grep for callers/dependencies  
+3. `get_code_snippet` → read tool for function source
+4. `get_architecture` → manual folder scanning
+5. `query_graph` → complex multi-hop patterns (Cypher)
+
+### Fallback to grep/glob Only When
+
+- Searching string literals, error messages, config values
+- Non-code files (Dockerfiles, shell scripts, configs)
+- CBM returns insufficient results
+
+### Recursion Guard
+
+The `cbm-integration` plugin blocks CBM tools from calling CBM tools. If you're inside a CBM tool call, use direct file reads instead.
+
+### Quick Reference
+
+```bash
+# Session start (auto)
+node hooks/session-start.mjs  # → triggers index_repository
+
+# Find a handler
+search_graph(name_pattern=".*OrderHandler.*")
+
+# Who calls it?
+trace_path(function_name="OrderHandler", direction="inbound")
+
+# Read the source
+get_code_snippet(qualified_name="pkg/orders.OrderHandler")
+
+# Architecture overview
+get_architecture(aspects=["overview", "clusters", "dependencies"])
+
+# Post-commit (auto via git hook)
+detect_changes(since="HEAD~1")
+```
+
+## 8. PROJECT SWITCH PROTOCOL
 
   When switching to a new project:
   □ Run: node scripts/activate-profile.mjs <profile>

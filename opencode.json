@@ -1,7 +1,12 @@
 {
   "$schema": "https://opencode.ai/config.json",
   "default_agent": "openagent",
-  "plugin": ["./plugins/ponytail.mjs", "superpowers@git+https://github.com/obra/superpowers.git", "opencode-pty, opencode-vibeguard"],
+  "plugin": [
+    "./plugins/ponytail.mjs",
+    "superpowers@git+https://github.com/obra/superpowers.git",
+    "opencode-pty, opencode-vibeguard",
+    "./plugins/cbm-integration.ts"
+  ],
   "provider": {
     "groq": {
       "npm": "@ai-sdk/openai-compatible",
@@ -24,17 +29,21 @@
   ],
   "permission": {
     "bash": {
-    "*": "allow"},
+      "*": "allow"
+    },
     "edit": "allow",
     "write": "allow",
     "read": "allow",
     "delete": "allow"
-
   },
   "mcp": {
     "context7": {
       "type": "local",
-      "command": ["npx", "-y", "@upstash/context7-mcp@latest"],
+      "command": [
+        "npx",
+        "-y",
+        "@upstash/context7-mcp@latest"
+      ],
       "enabled": true,
       "env": {
         "DEFAULT_MINIMUM_TOKENS": "5000"
@@ -42,7 +51,11 @@
     },
     "github-mcp-server": {
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-github"],
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-github"
+      ],
       "enabled": true,
       "env": {
         "GITHUB_TOKEN": "{env:GITHUB_TOKEN}"
@@ -50,7 +63,11 @@
     },
     "mssql": {
       "type": "local",
-      "command": ["npx", "-y", "mssql-mcp@latest"],
+      "command": [
+        "npx",
+        "-y",
+        "mssql-mcp@latest"
+      ],
       "enabled": true,
       "env": {
         "MSSQL_HOST": "{env:MSSQL_HOST}",
@@ -62,7 +79,11 @@
     },
     "sequential-thinking": {
       "type": "local",
-      "command": ["npx", "-y", "@modelcontextprotocol/server-sequential-thinking"],
+      "command": [
+        "npx",
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking"
+      ],
       "enabled": false
     },
     "awesome-copilot": {
@@ -104,7 +125,19 @@
     },
     "MCP_DOCKER": {
       "type": "local",
-      "command": ["docker", "mcp", "gateway", "run"],
+      "command": [
+        "docker",
+        "mcp",
+        "gateway",
+        "run"
+      ],
+      "enabled": true
+    },
+    "codebase-memory-mcp": {
+      "type": "local",
+      "command": [
+        "codebase-memory-mcp"
+      ],
       "enabled": true
     }
   }
