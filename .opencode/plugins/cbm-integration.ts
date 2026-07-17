@@ -1,164 +1,151 @@
 /**
- * CBM Integration Plugin for OpenCode
+ * Codebase Memory MCP Integration Plugin
  * 
- * Forces codebase-memory-mcp (CBM) consultation for every supported use case:
- * - Session start: auto-index current repo
- * - Pre-tool context: query CBM before tool calls
- * - Compaction: inject CBM context on compaction events
- * - Git-diff: run detect_changes on post-commit
- * - On-demand: expose CBM tools via MCP
- * 
- * Recursion guard: prevents CBM tools from calling CBM tools
+ * Provides hooks and utilities for integrating the codebase-memory-mcp
+ * server with OpenCode sessions. Automatically indexes the workspace
+ * on session start and provides helper functions for common operations.
  */
 
-import type { Plugin } from "opencode";
+import { definePlugin } from "@opencode/plugin";
 
-const CBM_TOOLS = [
-  "codebase-memory-mcp_search_graph",
-  "codebase-memory-mcp_trace_path",
-  "codebase-memory-mcp_get_code_snippet",
-  "codebase-memory-mcp_query_graph",
-  "codebase-memory-mcp_get_architecture",
-  "codebase-memory-mcp_index_repository",
-  "codebase-memory-mcp_detect_changes",
-  "codebase-memory-mcp_manage_adr",
-  "codebase-memory-mcp_list_projects",
-  "codebase-memory-mcp_index_status",
-  "codebase-memory-mcp_ingest_traces",
-  "codebase-memory-mcp_delete_project",
-  "codebase-memory-mcp_search_code",
-  "codebase-memory-mcp_get_graph_schema",
-];
-
-function isCBMTool(toolName: string): boolean {
-  return CBM_TOOLS.some(t => toolName.includes(t));
-}
-
-function getProjectName(): string {
-  // Derive project name from cwd
-  const cwd = process.cwd();
-  return cwd.split(/[\\/]/).pop() || "unknown";
-}
-
-async function autoIndexRepo(): Promise<void> {
-  try {
-    const project = getProjectName();
-    console.log(`[CBM] Auto-indexing project: ${project}`);
-    // The MCP server will handle the actual indexing
-    // This is a no-op hook - the real work happens via MCP tools
-  } catch (e) {
-    console.error("[CBM] Auto-index failed:", e);
-  }
-}
-
-async function preToolContext(toolName: string, args: any): Promise<any> {
-  // Skip if this IS a CBM tool (recursion guard)
-  if (isCBMTool(toolName)) {
-    return args;
-  }
-
-  // For supported tool types, inject CBM context
-  const contextTools = ["read", "write", "edit", "bash", "glob", "grep", "task"];
-  if (!contextTools.includes(toolName)) {
-    return args;
-  }
-
-  try {
-    const project = getProjectName();
-    
-    // For file operations, search for relevant code context
-    if (["read", "write", "edit"].includes(toolName) && args.filePath) {
-      const filePath = args.filePath;
-      // Extract relevant search terms from the file path
-      const searchTerms = filePath
-        .split(/[\\/]/)
-        .filter(p => p && !p.startsWith(".") && p !== "node_modules")
-        .slice(-3)
-        .join(" ");
-      
-      if (searchTerms) {
-        console.log(`[CBM] Pre-tool context search: ${searchTerms}`);
-        // The actual CBM query would happen via MCP tool call
-        // This plugin signals the intent - the agent should call CBM tools
-      }
-    }
-    
-    // For bash commands, check if it's a code-related operation
-    if (toolName === "bash" && args.command) {
-      const cmd = args.command.toLowerCase();
-      if (cmd.includes("test") || cmd.includes("build") || cmd.includes("lint") || cmd.includes("typecheck")) {
-        console.log("[CBM] Build/test command detected - consider running detect_changes after");
-      }
-    }
-  } catch (e) {
-    // Non-blocking - log and continue
-    console.error("[CBM] Pre-tool context error:", e);
-  }
-
-  return args;
-}
-
-async function onCompaction(): Promise<void> {
-  try {
-    const project = getProjectName();
-    console.log(`[CBM] Compaction event - injecting architecture context for ${project}`);
-    // Signal that architecture context should be fetched
-  } catch (e) {
-    console.error("[CBM] Compaction hook error:", e);
-  }
-}
-
-async function onGitCommit(): Promise<void> {
-  try {
-    const project = getProjectName();
-    console.log(`[CBM] Post-commit - running detect_changes for ${project}`);
-    // Signal that detect_changes should be run
-  } catch (e) {
-    console.error("[CBM] Git commit hook error:", e);
-  }
-}
-
-const plugin: Plugin = {
+export default definePlugin({
   name: "cbm-integration",
   version: "1.0.0",
-  description: "Forces codebase-memory-mcp consultation for all supported use cases",
+  description: "Codebase Memory MCP integration for automatic indexing and context retrieval",
   
   hooks: {
-    // Session start: auto-index the repository
-    "session:start": async () => {
-      await autoIndexRepo();
+    "session:start": async (ctx) => {
+      const { workspace } = ctx;
+      console.log(`[CBM] Session started for workspace: ${workspace}`);
+      
+      // Auto-index the workspace on session start
+      try {
+        const result = await ctx.mcp.call("codebase-memory-mcp", "index_repository", {
+          repo_path: workspace,
+          mode: "fast",
+          persistence: true
+        });
+        console.log(`[CBM] Indexing complete: ${result.status}`);
+      } catch (err) {
+        console.warn(`[CBM] Auto-index failed (non-blocking): ${err.message}`);
+      }
     },
-
-    // Pre-tool: inject CBM context before tool execution
-    "tool:before": async (toolName: string, args: any) => {
-      return await preToolContext(toolName, args);
+    
+    "session:stop": async (ctx) => {
+      console.log(`[CBM] Session ended`);
     },
-
-    // Compaction: inject CBM context
-    "compaction:before": async () => {
-      await onCompaction();
-    },
-
-    // Git commit: run detect_changes
-    "git:commit": async () => {
-      await onGitCommit();
-    },
+    
+    "pre:tool": async (ctx, tool) => {
+      // Inject CBM context for relevant tools
+      if (["read", "write", "edit", "grep", "glob"].includes(tool.name)) {
+        // Could add pre-fetch logic here if needed
+      }
+    }
   },
-
-  // Expose CBM tools via MCP (handled by MCP server config)
-  tools: {},
-
-  // Configuration schema
-  config: {
-    type: "object",
-    properties: {
-      autoIndex: { type: "boolean", default: true },
-      preToolContext: { type: "boolean", default: true },
-      compactionContext: { type: "boolean", default: true },
-      gitHooks: { type: "boolean", default: true },
-      recursionGuard: { type: "boolean", default: true },
+  
+  commands: {
+    "cbm:index": {
+      description: "Index the current workspace with codebase-memory-mcp",
+      async handler(ctx, args) {
+        const mode = args.mode || "full";
+        const result = await ctx.mcp.call("codebase-memory-mcp", "index_repository", {
+          repo_path: ctx.workspace,
+          mode,
+          persistence: true
+        });
+        return `Indexing ${mode} mode: ${result.status}`;
+      }
     },
+    
+    "cbm:search": {
+      description: "Search the codebase knowledge graph",
+      async handler(ctx, args) {
+        const { query, limit = 20, label, file_pattern } = args;
+        const result = await ctx.mcp.call("codebase-memory-mcp", "search_graph", {
+          project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+          query,
+          limit,
+          label,
+          file_pattern
+        });
+        return JSON.stringify(result, null, 2);
+      }
+    },
+    
+    "cbm:trace": {
+      description: "Trace call paths for a function",
+      async handler(ctx, args) {
+        const { function_name, direction = "both", depth = 3 } = args;
+        const result = await ctx.mcp.call("codebase-memory-mcp", "trace_path", {
+          project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+          function_name,
+          direction,
+          depth
+        });
+        return JSON.stringify(result, null, 2);
+      }
+    },
+    
+    "cbm:architecture": {
+      description: "Get high-level architecture overview",
+      async handler(ctx, args) {
+        const { aspects = ["all"] } = args;
+        const result = await ctx.mcp.call("codebase-memory-mcp", "get_architecture", {
+          project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+          aspects
+        });
+        return JSON.stringify(result, null, 2);
+      }
+    },
+    
+    "cbm:status": {
+      description: "Check indexing status",
+      async handler(ctx) {
+        const result = await ctx.mcp.call("codebase-memory-mcp", "index_status", {
+          project: ctx.workspace.split(/[\\/]/).pop() || "workspace"
+        });
+        return JSON.stringify(result, null, 2);
+      }
+    },
+    
+    "cbm:adr": {
+      description: "Manage Architecture Decision Records",
+      async handler(ctx, args) {
+        const { mode = "get", content, sections } = args;
+        const result = await ctx.mcp.call("codebase-memory-mcp", "manage_adr", {
+          project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+          mode,
+          content,
+          sections
+        });
+        return JSON.stringify(result, null, 2);
+      }
+    }
   },
-};
-
-export default plugin;
+  
+  // Provide context functions for agents
+  context: {
+    "cbm:search": async (ctx, query: string, options?: any) => {
+      return ctx.mcp.call("codebase-memory-mcp", "search_graph", {
+        project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+        query,
+        ...options
+      });
+    },
+    
+    "cbm:get_code": async (ctx, qualified_name: string) => {
+      return ctx.mcp.call("codebase-memory-mcp", "get_code_snippet", {
+        project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+        qualified_name
+      });
+    },
+    
+    "cbm:trace": async (ctx, function_name: string, options?: any) => {
+      return ctx.mcp.call("codebase-memory-mcp", "trace_path", {
+        project: ctx.workspace.split(/[\\/]/).pop() || "workspace",
+        function_name,
+        ...options
+      });
+    }
+  }
+});

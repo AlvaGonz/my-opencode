@@ -1,11 +1,11 @@
 {
     "schema_version": 2,
-    "commit": "4b297e253185ed4846a68bcd793b085eed39bf77",
-    "indexed_at": "2026-07-17T04:49:33Z",
+    "commit": "13971414956ffa6b916d280c90937eafa6e18b9c",
+    "indexed_at": "2026-07-17T05:34:29Z",
     "project": "C-Users-Alva-.opencode",
-    "nodes": 49668,
-    "edges": 61874,
-    "original_size": 61276160,
-    "compressed_size": 8968094,
+    "nodes": 52250,
+    "edges": 67290,
+    "original_size": 65798144,
+    "compressed_size": 10080361,
     "compression_level": 3
 }
