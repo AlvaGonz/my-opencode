@@ -15,7 +15,6 @@
     "command:clean",
     "command:prompt-enhancer",
     "tool:env",
-    "tool:gemini",
     "context:essential-patterns",
     "context:project-context",
     "context:core/*",
